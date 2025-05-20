@@ -1,7 +1,5 @@
-package br.edu.ifpb.academico.Amantes_Cafezinho.model;
-
+package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 import jakarta.persistence.Entity;
-//import jakarta.persistence.CascadeType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,27 +10,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "Unidade")
+@Entity(name = "Phone")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Unidade {
+public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    private String DDD;
+    private String number;
+    private String type;
+
+    @ManyToOne
     @JoinColumn(nullable = false)
-    private Cafeteria cafeteria;
-
-    private String nome;
-
-    // Diferente da Matriz
-    private String CNPJ;
-
-    private boolean ativo;
-
-    private String categoriaDePreco;
-
+    private User user;
     
 }

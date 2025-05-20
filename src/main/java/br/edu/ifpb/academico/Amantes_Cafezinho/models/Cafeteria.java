@@ -1,4 +1,4 @@
-package br.edu.ifpb.academico.Amantes_Cafezinho.model;
+package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 import java.util.List;
 
@@ -7,8 +7,7 @@ import lombok.*;
 
 
 @Entity(name = "Cafeteria")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -20,10 +19,10 @@ public class Cafeteria extends User {
 
     private String CNPJ;
 
-    private String razaoSocial;
+    private String SocialReason;
 
-    private String nomeFantasia;
+    private String FantasyName;
 
-    @OneToMany(mappedBy = "cafeteria", cascade = CascadeType.ALL)
-    private List<Unidade> unidades;
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    private List<Unit> units;
 }

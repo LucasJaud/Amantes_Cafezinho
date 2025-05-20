@@ -1,4 +1,5 @@
-package br.edu.ifpb.academico.Amantes_Cafezinho.model;
+package br.edu.ifpb.academico.Amantes_Cafezinho.models;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,21 +11,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "Phone")
+@Entity(name = "Localization")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Phone {
+public class Localization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ddd;
-    private String numero;
-    private String tipo;
+    private String ZipCode;
+    private String city;
+    private String State;
+    private String number;
+    private String street;
+    private String neighborhood;
+    private String complement;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private User user;
-    
+    @ManyToOne(optional = false)
+    private User users;
 }

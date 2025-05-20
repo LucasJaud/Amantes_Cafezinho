@@ -1,4 +1,4 @@
-package br.edu.ifpb.academico.Amantes_Cafezinho.model;
+package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 
 import java.sql.Date;
@@ -32,9 +32,9 @@ public abstract class User {
 
     @OneToMany(mappedBy = "User", fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
-    private Localization localization;
+    private List<Localization> localization;
 
-    
+    @OneToMany(mappedBy = "User", fetch = FetchType.EAGER)
+    private List<Comment> comments;
 
-    
 }

@@ -20,9 +20,9 @@ public class Localization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ZipCode;
+    private String zipCode;
     private String city;
-    private String State;
+    private String state;
     private String number;
     private String street;
     private String neighborhood;

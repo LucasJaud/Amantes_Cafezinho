@@ -17,6 +17,6 @@ public class Admin extends User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean PermissionApproval;
+    private boolean permissionApproval;
 
 }

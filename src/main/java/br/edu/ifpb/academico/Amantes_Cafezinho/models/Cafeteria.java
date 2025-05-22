@@ -19,9 +19,9 @@ public class Cafeteria extends User {
 
     private String CNPJ;
 
-    private String SocialReason;
+    private String socialReason;
 
-    private String FantasyName;
+    private String fantasyName;
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     private List<Unit> units;

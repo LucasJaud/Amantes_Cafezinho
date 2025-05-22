@@ -29,7 +29,7 @@ public class Unit {
 
     private boolean isActive;
 
-    private String PriceCategory;
+    private String priceCategory;
 
     @OneToMany(mappedBy = "Unit",fetch = FetchType.EAGER)
     private List<Review> reviews;

@@ -28,5 +28,11 @@ public class FachadaService {
         return cafeteriaService.resgatarCafeteriaPorCNPJ(cnpj);
 
     }
+
+    public Unit resgatarUnidadePorId(Long id) {
+
+        return unitService.resgatarUnidadePorId(id);
+
+    }
     
 }

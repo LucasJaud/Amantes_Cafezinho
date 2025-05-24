@@ -37,6 +37,11 @@ public class UnitService {
         
     }
 
+    public Unit resgatarUnidadePorId(Long id) {
+        
+        return unitRepository.findById(id).orElse(null);
+    }
+
 
 
 

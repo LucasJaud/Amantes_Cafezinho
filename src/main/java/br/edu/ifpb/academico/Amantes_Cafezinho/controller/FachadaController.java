@@ -21,7 +21,7 @@ public class FachadaController {
     @Autowired
     private FachadaService fachadaService;
 
-    @PostMapping(("/criarUnidade"))
+    @PostMapping("/criarUnidade")
     public ModelAndView criarUnidade
                                     (ModelAndView mav,
                                     @Validated @ModelAttribute("Unit") Unit unidade,

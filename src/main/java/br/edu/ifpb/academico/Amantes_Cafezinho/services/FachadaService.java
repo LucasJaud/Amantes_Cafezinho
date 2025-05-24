@@ -1,8 +1,11 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.academico.Amantes_Cafezinho.errors.CafeteriaSemUnidades;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Unit;
 
@@ -32,6 +35,18 @@ public class FachadaService {
     public Unit resgatarUnidadePorId(Long id) {
 
         return unitService.resgatarUnidadePorId(id);
+
+    }
+
+    public List<Unit> resgatarUnidadesPorCafeteria(Cafeteria cafeteria) throws CafeteriaSemUnidades{
+
+        List<Unit> unidadesResgatadas = unitService.resgatarUnidadesPorCafeteria(cafeteria);
+
+        if (unidadesResgatadas.isEmpty()) {
+            throw new CafeteriaSemUnidades();
+        }
+
+        return unidadesResgatadas;
 
     }
     

@@ -1,5 +1,8 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controller;
 
+import java.util.List;
+
+import br.edu.ifpb.academico.Amantes_Cafezinho.errors.CafeteriaSemUnidades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +59,7 @@ public class FachadaController {
     }
 
 
-    @GetMapping("perfilUnidade/{id}")
+    @GetMapping("/perfilUnidade/{id}")
     public ModelAndView perfilUnidade(ModelAndView mav, @PathVariable Long id) {
         // Resgata a unidade pelo ID
         Unit unidade = fachadaService.resgatarUnidadePorId(id);
@@ -69,6 +72,25 @@ public class FachadaController {
         
         return mav;
     }
+
+
+    @GetMapping("/listarUnidades")
+    public ModelAndView listarUnidades(ModelAndView mav, HttpSession session){
+        // Resgata a cafeteria logada
+        Cafeteria cafeteriaLogada =(Cafeteria) session.getAttribute("CafeteriaLogada");
+        
+        // Resgata todas as unidades da cafeteria logada
+        List<Unit> unidades = fachadaService.resgatarUnidadesPorCafeteria(cafeteriaLogada);
+        
+        // Adiciona as unidades ao modelo
+        mav.addObject("unidades", unidades);
+        
+        // Define a view para listar as unidades
+        mav.setViewName("views/listarUnidades");
+        
+        return mav;
+    }
+
 
 
 

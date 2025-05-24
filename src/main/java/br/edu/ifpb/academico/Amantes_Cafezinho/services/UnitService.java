@@ -1,8 +1,12 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.academico.Amantes_Cafezinho.errors.CNPJExistente;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Unit;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.CafeteriaRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.UnitRepository;
@@ -16,18 +20,12 @@ public class UnitService {
     @Autowired
     private CafeteriaRepository cafeteriaRepository;
 
-    public boolean temUnidadeComCnpj(String cnpj) {
+    public boolean temUnidadeComCnpj(String cnpj) throws CNPJExistente{
 
-        unitRepository.findByCNPJ(cnpj).ifPresent(unit -> {
-            // lançar um erro
-            // implementar amanha
-        });
-
-        cafeteriaRepository.findByCNPJ(cnpj).ifPresent(unit -> {
-            // lançar um erro
-            // implementar amanha 24/05
-        });
-
+        if (unitRepository.findByCNPJ(cnpj).isPresent() || cafeteriaRepository.findByCNPJ(cnpj).isPresent()) {
+            throw new CNPJExistente();
+        }
+        
         return true; 
     }
 
@@ -41,6 +39,11 @@ public class UnitService {
         
         return unitRepository.findById(id).orElse(null);
     }
+
+    public List<Unit> resgatarUnidadesPorCafeteria(Cafeteria cafeteria) {
+        
+        return unitRepository.findByCafeteria(cafeteria);
+    }	
 
 
 

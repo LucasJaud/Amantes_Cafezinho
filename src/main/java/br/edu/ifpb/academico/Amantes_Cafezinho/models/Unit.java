@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
 @Data
-@Entity(name = "Unit")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Unit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "cafeteria_id",nullable = false)
     private Cafeteria cafeteria;
 
     private String name;

@@ -1,8 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
@@ -10,13 +8,13 @@ import java.util.List;
 @Data
 @Entity
 public class Status {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String type;
 
-    @OneToMany(mappedBy = "status")
+    @OneToMany(mappedBy = "status", fetch = FetchType.EAGER)
     private List<Review> reviews;
 
 }

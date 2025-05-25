@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Login</title>
+</head>
+<body class="px-10 pt-10 flex flex-col h-screen bg-zinc-50 text-zinc-900">
+<header class="flex justify-between items-center">
+    <h1 class="text-5xl font-bold text-brown-800">Amantes do Cafezinho</h1>
+
+    <a th:href="@{/auth/signup}"
+       class="w-[212px] h-[56px] flex justify-center items-center bg-amber-800 text-white text-xl rounded hover:bg-amber-900 transition-colors"
+       role="button">
+        Criar Conta
+    </a>
+</header>
+
+<main class="flex flex-1 w-full h-full justify-center items-center">
+    <div class="flex flex-col gap-10 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+        <div class="flex flex-col gap-3">
+            <h2 class="text-3xl font-semibold text-center">Que bom ter você de volta!</h2>
+
+            <div class="bg-red-300 text-red-700 w-full p-4 rounded text-sm text-center" role="alert"
+                 th:if="${error}" th:text="${error}">
+            </div>
+
+            <div class="bg-red-300 text-red-700 w-full p-4 rounded text-sm text-center" role="alert"
+                 th:if="${param.error}" th:text="${param.error}">
+            </div>
+
+            <div class="bg-green-300 text-green-700 w-full p-4 rounded text-sm text-center" role="alert"
+                 th:if="${param.logout}">
+                Você saiu com sucesso!
+            </div>
+        </div>
+
+        <form th:action="@{/auth/login}" method="post" class="flex flex-col gap-5">
+            <div>
+                <label for="email" class="text-lg block mb-2 font-medium">Email:</label>
+                <input type="email" id="email" name="email" placeholder="exemplo@cafezinho.com"
+                       class="border border-gray-300 text-zinc-950 text-sm rounded-lg focus:outline-amber-800 block w-full p-2.5 transition-all"
+                       required>
+            </div>
+
+            <div>
+                <label for="password" class="text-lg block mb-2 font-medium">Senha:</label>
+                <input type="password" id="password" name="password"
+                       placeholder="Senha com no mínimo 8 caracteres"
+                       class="border border-gray-300 text-zinc-950 text-sm rounded-lg focus:outline-amber-800 block w-full p-2.5"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="flex justify-center items-center bg-amber-800 w-full py-3 text-white text-xl rounded hover:bg-amber-900 transition-colors mt-2">
+                Entrar no Sistema
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-zinc-600">
+            Ainda não tem conta? <a th:href="@{/auth/signup}" class="text-amber-800 hover:underline">Cadastre-se aqui</a>.
+        </p>
+    </div>
+</main>
+</body>
+</html>

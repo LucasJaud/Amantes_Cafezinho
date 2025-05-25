@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
 @Data
-@Entity(name = "Unit")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Unit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "cafeteria_id",nullable = false)
     private Cafeteria cafeteria;
 
     private String name;
@@ -31,7 +30,7 @@ public class Unit {
 
     private String priceCategory;
 
-    @OneToMany(mappedBy = "Unit",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     

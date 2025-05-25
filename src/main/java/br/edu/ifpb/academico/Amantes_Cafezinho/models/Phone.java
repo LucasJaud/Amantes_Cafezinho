@@ -1,16 +1,12 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "Phone")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Phone {
@@ -24,7 +20,7 @@ public class Phone {
     private String type;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
     
 }

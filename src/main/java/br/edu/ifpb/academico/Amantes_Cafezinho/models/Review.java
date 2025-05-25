@@ -1,9 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,19 +10,23 @@ import java.util.List;
 @Data
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Date datetime;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "cafeteria_id",nullable = false)
     private Reviewer reviewer;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "unit_id",nullable = false)
     private Unit unit;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "status_id",nullable = false)
     private Status status;
 
-    @OneToMany
+    @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<Comment> comments;
 }

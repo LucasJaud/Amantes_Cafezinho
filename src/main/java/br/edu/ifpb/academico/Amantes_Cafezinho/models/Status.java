@@ -16,7 +16,7 @@ public class Status {
 
     private String type;
 
-    @OneToMany(mappedBy = "Status")
+    @OneToMany(mappedBy = "status")
     private List<Review> reviews;
 
 }

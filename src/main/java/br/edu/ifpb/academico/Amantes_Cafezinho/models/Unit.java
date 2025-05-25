@@ -31,7 +31,7 @@ public class Unit {
 
     private String priceCategory;
 
-    @OneToMany(mappedBy = "Unit",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     

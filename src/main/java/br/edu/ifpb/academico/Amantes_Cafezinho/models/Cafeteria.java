@@ -23,6 +23,6 @@ public class Cafeteria extends User {
 
     private String fantasyName;
 
-    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafeteria", cascade = CascadeType.ALL)
     private List<Unit> units;
 }

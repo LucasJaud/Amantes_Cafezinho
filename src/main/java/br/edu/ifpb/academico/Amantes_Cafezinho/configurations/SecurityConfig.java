@@ -26,7 +26,9 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/libs/**",
                                 "/assets/**",
-                                "/auth/**"
+                                "/auth/**",
+                                "/auth/signup/**",
+                                "/auth/register/**"
                         ).permitAll()
 
                         // Rotas específicas para ROLE ADMIN

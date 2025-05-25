@@ -1,6 +1,5 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.services;
 
-import br.edu.ifpb.academico.Amantes_Cafezinho.dtos.UserFormDTO;
 import br.edu.ifpb.academico.Amantes_Cafezinho.errors.EmailAlreadyInUseException;
 import br.edu.ifpb.academico.Amantes_Cafezinho.errors.UsernameAlreadyInUseException;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
@@ -35,52 +34,19 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void register(UserFormDTO dto) throws RuntimeException{
-        User user = new User();
+    public void registerCafeteria(Cafeteria cafeteria) throws RuntimeException{
+        User user = validateUser(cafeteria.getUser());
+        user.getRoles().add(getRoleByName("cafeteria"));
+        cafeteria.setUser(user);
+        cafeteriaRepository.save(cafeteria);
+    }
 
-        validateEmailIsFree(dto.email());
-        validateUsernameIsFree(dto.username());
-
-        user.setEmail(dto.email());
-        user.setUsername(dto.username());
-
-        user.setPassword(passwordEncoder.encode(dto.password()));
-
-        if(dto.userType().contains("REVIEWER")){
-            Reviewer reviewer = new Reviewer();
-            Role role = roleRepository.findByName(dto.userType())
-                    .orElseGet(() -> {
-                        Role newRole = new Role();
-                        newRole.setName(dto.userType());
-                        return newRole;
-                    });
-
-            user.getRoles().add(role);
-            reviewer.setUser(user);
-            reviewer.setCPF(dto.cpf());
-            reviewer.setBirthDate(dto.birthDate());
-            reviewer.setSex(dto.sex());
-            reviewer.setFullName(dto.fullName());
-            reviewerRepository.save(reviewer); // criar service para validar os campos únicos
-        }
-
-        if(dto.userType().contains("CAFETERIA")) {
-            Cafeteria cafeteria = new Cafeteria();
-            Role role = roleRepository.findByName(dto.userType())
-                    .orElseGet(() -> {
-                        Role newRole = new Role();
-                        newRole.setName(dto.userType());
-                        return newRole;
-                    });
-
-            user.getRoles().add(role);
-            cafeteria.setUser(user);
-            cafeteria.setCNPJ(dto.cnpj());
-            cafeteria.setSocialReason(dto.socialReason());
-            cafeteria.setFantasyName(dto.fantasyName());
-            cafeteriaRepository.save(cafeteria); // criar service para validar os campos únicos
-        }
-
+    @Transactional
+    public void registerReviewer(Reviewer reviewer) throws RuntimeException{
+        User user = validateUser(reviewer.getUser());
+        user.getRoles().add(getRoleByName("reviewer"));
+        reviewer.setUser(user);
+        reviewerRepository.save(reviewer);
     }
 
     public void validateEmailIsFree(String email) {
@@ -93,6 +59,24 @@ public class AuthService {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UsernameAlreadyInUseException(username);
         }
+    }
+
+    public User validateUser(User user) throws RuntimeException{
+        validateUsernameIsFree(user.getUsername());
+        validateEmailIsFree(user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return user;
+    }
+
+    public Role getRoleByName(String name){
+        Role role = roleRepository.findByName(name.toUpperCase())
+                .orElseGet(() -> {
+                    Role newRole = new Role();
+                    newRole.setName(name.toUpperCase());
+                    return newRole;
+                });
+
+        return role;
     }
 
 }

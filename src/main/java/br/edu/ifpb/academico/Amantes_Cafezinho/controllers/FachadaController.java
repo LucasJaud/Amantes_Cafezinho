@@ -1,8 +1,7 @@
-package br.edu.ifpb.academico.Amantes_Cafezinho.controller;
+package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
 import java.util.List;
 
-import br.edu.ifpb.academico.Amantes_Cafezinho.errors.CafeteriaSemUnidades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

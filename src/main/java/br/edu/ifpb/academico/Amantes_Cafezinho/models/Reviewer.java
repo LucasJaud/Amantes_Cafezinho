@@ -24,7 +24,7 @@ public class Reviewer extends User{
 
     private Date birthDate;
 
-    @OneToMany(mappedBy = "Reviewer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "reviewer", fetch = FetchType.EAGER)
     private List<Review> review;
 
 }

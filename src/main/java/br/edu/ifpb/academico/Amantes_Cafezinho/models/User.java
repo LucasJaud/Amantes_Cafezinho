@@ -26,15 +26,13 @@ public abstract class User {
 
     private String username;
 
-    @OneToMany(mappedBy = "User", fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Phone> phones;
 
-    @OneToMany(mappedBy = "User", fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Localization> localization;
 
-    @OneToMany(mappedBy = "User", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
 }

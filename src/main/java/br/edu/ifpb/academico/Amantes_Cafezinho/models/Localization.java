@@ -29,5 +29,5 @@ public class Localization {
     private String complement;
 
     @ManyToOne(optional = false)
-    private User users;
+    private User user;
 }

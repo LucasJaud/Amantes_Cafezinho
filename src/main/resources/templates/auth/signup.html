@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layout :: head}">
-    <title>Amantes do Cafezinho | Cadastro</title>
+    <title>Amantes do Cafezinho | Escolha o tipo de cadastro</title>
 </head>
 <body class="px-10 pt-10 flex flex-col min-h-screen bg-zinc-50 text-zinc-900">
 <header class="flex justify-between items-center">
@@ -11,137 +11,22 @@
        role="button">Fazer Login</a>
 </header>
 
-<main class="mt-10 flex gap-10 justify-center items-start flex-1">
-    <div class="flex flex-col justify-between max-w-[780px] w-full bg-white p-10 rounded-xl border border-zinc-200 shadow-md">
-        <h2 class="text-3xl font-semibold text-brown-800">
-            Cadastre-se para avaliar cafeterias ou promover seu estabelecimento!
-        </h2>
+<main class="mt-20 flex flex-col items-center gap-10">
+    <h2 class="text-3xl font-semibold text-brown-800 mb-6">Escolha o tipo de cadastro</h2>
 
-        <ul class="my-4 text-zinc-700">
-            <li class="flex items-center gap-1">
-                <span>☕ Compartilhe experiências e descubra novas cafeterias.</span>
-            </li>
-            <li class="flex items-center gap-1">
-                <span>🏪 Cadastre sua cafeteria e receba avaliações reais.</span>
-            </li>
-        </ul>
+    <div class="flex gap-8">
+        <a th:href="@{/auth/signup/reviewer}"
+           class="w-80 h-60 flex flex-col justify-center items-center bg-white rounded-lg shadow-md border border-zinc-300 text-center hover:bg-amber-100 transition-colors cursor-pointer">
+            <span class="text-5xl mb-4">☕</span>
+            <span class="text-xl font-medium">Quero ser Avaliador</span>
+        </a>
 
-        <form th:action="@{/auth/register}" method="post" th:object="${UserForm}" class="flex flex-col gap-5">
-            <!-- Tipo de usuário -->
-            <div>
-                <label for="userType" class="text-lg block mb-2 font-medium">Tipo de Cadastro:</label>
-                <select id="userType" name="userType" th:field="*{userType}" class="border border-gray-300 text-sm rounded-lg w-full p-2.5" onchange="toggleFields(this.value)">
-                    <option value="REVIEWER">Avaliador</option>
-                    <option value="CAFETERIA">Cafeteria</option>
-                </select>
-            </div>
-
-            <!-- Email -->
-            <div>
-                <label for="email" class="text-lg block mb-2 font-medium">Email:</label>
-                <input type="email" id="email" th:field="*{email}" placeholder="exemplo@exemplo.com" class="border border-gray-300 text-zinc-950 text-sm rounded-lg w-full p-2.5">
-            </div>
-
-            <!-- Senha -->
-            <div>
-                <label for="password" class="text-lg block mb-2 font-medium">Senha:</label>
-                <input type="password" id="password" th:field="*{password}" placeholder="Senha forte com no mínimo 8 dígitos incluindo letras e números" class="border border-gray-300 text-zinc-950 text-sm rounded-lg w-full p-2.5">
-            </div>
-
-            <!-- Nome de usuário -->
-            <div>
-                <label for="username" class="text-lg block mb-2 font-medium">Nome de Usuário:</label>
-                <input type="username" id="username" th:field="*{username}" placeholder="Seu nome de usuário" class="border border-gray-300 text-zinc-950 text-sm rounded-lg w-full p-2.5">
-            </div>
-
-            <!-- Avaliador -->
-            <div id="reviewerFields" class="flex flex-col gap-4">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="w-full md:w-1/2">
-                        <label for="cpf" class="text-lg block mb-2 font-medium text-zinc-950">CPF:</label>
-                        <input type="text" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00"
-                               class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                    </div>
-
-                    <div class="w-full md:w-1/2">
-                        <label for="fullName" class="text-lg block mb-2 font-medium text-zinc-950">Nome Completo:</label>
-                        <input type="text" id="fullName" th:field="*{fullName}" placeholder="Seu nome completo"
-                               class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="w-full md:w-1/2">
-                        <label for="birthDate" class="text-lg block mb-2 font-medium text-zinc-950">Data de Nascimento:</label>
-                        <input type="date" id="birthDate" th:field="*{birthDate}"
-                               class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                    </div>
-
-                    <div class="w-full md:w-1/2">
-                        <label for="sex" class="text-lg block mb-2 font-medium text-zinc-950">Sexo:</label>
-                        <select id="sex" th:field="*{sex}"
-                                class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                            <option value="">Selecione</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                            <option value="O">Outro</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Cafeteria -->
-            <div id="cafeteriaFields" class="flex flex-col gap-4" style="display: none;">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="w-full md:w-1/2">
-                        <label for="cnpj" class="text-lg block mb-2 font-medium text-zinc-950">CNPJ:</label>
-                        <input type="text" id="cnpj" th:field="*{cnpj}" placeholder="00.000.000/0001-00"
-                               class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                    </div>
-
-                    <div class="w-full md:w-1/2">
-                        <label for="socialReason" class="text-lg block mb-2 font-medium text-zinc-950">Razão Social:</label>
-                        <input type="text" id="socialReason" th:field="*{socialReason}"
-                               placeholder="Sua razão social"
-                               class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                    </div>
-                </div>
-
-                <div>
-                    <label for="fantasyName" class="text-lg block mb-2 font-medium text-zinc-950">Nome Fantasia:</label>
-                    <input type="text" id="fantasyName" th:field="*{fantasyName}"
-                           placeholder="Seu nome fantasia"
-                           class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
-                </div>
-            </div>
-
-            <!-- Botão -->
-            <button type="submit" class="flex justify-center items-center bg-amber-800 w-full py-3 text-white text-xl rounded hover:bg-amber-900 transition-colors mt-2">
-                Cadastrar-se
-            </button>
-        </form>
+        <a th:href="@{/auth/signup/cafeteria}"
+           class="w-80 h-60 flex flex-col justify-center items-center bg-white rounded-lg shadow-md border border-zinc-300 text-center hover:bg-amber-100 transition-colors cursor-pointer">
+            <span class="text-5xl mb-4">🏪</span>
+            <span class="text-xl font-medium">Cadastrar minha Cafeteria</span>
+        </a>
     </div>
-
-    <img th:src="@{/assets/coffee-signup.jpg}" alt="Imagem de cafeteria" class="rounded-lg min-w-[580px] h-[780px] object-cover shadow-md border border-zinc-200">
 </main>
-
-<script>
-    function toggleFields(userType) {
-        const reviewer = document.getElementById('reviewerFields');
-        const cafeteria = document.getElementById('cafeteriaFields');
-        if (userType === 'REVIEWER') {
-            reviewer.style.display = 'block';
-            cafeteria.style.display = 'none';
-        } else {
-            reviewer.style.display = 'none';
-            cafeteria.style.display = 'block';
-        }
-    }
-
-    window.addEventListener("DOMContentLoaded", function () {
-        toggleFields(document.getElementById('userType').value);
-    });
-</script>
 </body>
 </html>

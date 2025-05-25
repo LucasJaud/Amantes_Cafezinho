@@ -1,7 +1,7 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
-import br.edu.ifpb.academico.Amantes_Cafezinho.dtos.UserFormDTO;
-import br.edu.ifpb.academico.Amantes_Cafezinho.models.User;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.AuthService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -21,28 +21,51 @@ public class AuthController {
     @Autowired
     AuthService authservice;
 
-    @PostMapping("/register")
-    public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("UserForm") UserFormDTO userFormDTO, HttpSession session, BindingResult result){
-        if (result.hasErrors()) {
-            mav.setViewName("auth/signup");
-            return mav;
-        }
-        authservice.register(userFormDTO);
-        mav.setViewName("redirect:/auth/signin");
+    @GetMapping("/signin")
+    public ModelAndView signIn(ModelAndView mav) {
+        mav.setViewName("auth/signin");
         return mav;
     }
 
     @GetMapping("/signup")
     public ModelAndView signUp(ModelAndView mav) {
-        UserFormDTO userForm = new UserFormDTO();
-        mav.addObject("UserForm", userForm);
         mav.setViewName("auth/signup");
         return mav;
     }
 
-    @GetMapping("/signin")
-    public ModelAndView signIn(ModelAndView mav) {
-        mav.setViewName("auth/signin");
+    @GetMapping("/signup/cafeteria")
+    public ModelAndView signUpCafeteria(ModelAndView mav, Cafeteria cafeteria) {
+        mav.addObject("cafeteria", cafeteria);
+        mav.setViewName("auth/signup-cafeteria");
+        return mav;
+    }
+
+    @GetMapping("/signup/reviewer")
+    public ModelAndView signUpReviewer(ModelAndView mav, Reviewer reviewer) {
+        mav.addObject("reviewer", reviewer);
+        mav.setViewName("auth/signup-reviewer");
+        return mav;
+    }
+
+    @PostMapping("/register/cafeteria")
+    public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("cafeteria") Cafeteria cafeteria, BindingResult result){
+        if (result.hasErrors()) {
+            mav.setViewName("auth/signup/cafeteria");
+            return mav;
+        }
+        authservice.registerCafeteria(cafeteria);
+        mav.setViewName("redirect:/auth/signin");
+        return mav;
+    }
+
+    @PostMapping("/register/reviewer")
+    public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("reviewer") Reviewer reviewer, BindingResult result){
+        if (result.hasErrors()) {
+            mav.setViewName("auth/signup/reviewer");
+            return mav;
+        }
+        authservice.registerReviewer(reviewer);
+        mav.setViewName("redirect:/auth/signin");
         return mav;
     }
 

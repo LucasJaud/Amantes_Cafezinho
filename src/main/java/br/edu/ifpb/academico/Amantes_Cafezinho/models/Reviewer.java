@@ -1,6 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class Reviewer{
 
     private String fullName;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.EAGER)
     private List<Review> review;

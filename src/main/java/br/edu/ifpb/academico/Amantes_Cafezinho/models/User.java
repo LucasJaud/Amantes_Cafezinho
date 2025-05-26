@@ -1,6 +1,5 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -92,4 +91,8 @@ public class User implements UserDetails {
         return roles.stream().anyMatch(role -> role.getAuthority().equals(roleName));
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.creationDate = LocalDateTime.now();
+    }
 }

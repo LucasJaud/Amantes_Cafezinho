@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import java.util.Locale;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity // Habilita segurança baseada em métodos (@PreAuthorize, @PostAuthorize, etc.)
@@ -22,6 +24,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Rotas públicas (acesso sem autenticação)
                         .requestMatchers(
+                                "/",
+                                "/Amantes_Cafezinho/",
+                                "/home",
                                 "/css/**",
                                 "/js/**",
                                 "/libs/**",

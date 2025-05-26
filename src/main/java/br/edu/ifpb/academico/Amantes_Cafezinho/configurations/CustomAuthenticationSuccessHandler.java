@@ -19,13 +19,6 @@ import java.util.Optional;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserRoleCheckerService roleCheckerService;
-
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -38,21 +31,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // Cria a sessão
         HttpSession session = request.getSession();
 
-        // Busca o tipo de usuário nos repositórios e o adiciona na sessão
-        Optional<Object> userData = roleCheckerService.findUserInRepositories(user);
-
-        if (userData.isPresent()) {
-            Object roleUser = userData.get();
-
-            switch (roleUser) {
-                case Admin admin -> session.setAttribute("admin", admin);
-                case Reviewer reviewer -> session.setAttribute("reviewer", reviewer);
-                case Cafeteria cafeteria -> session.setAttribute("cafeteria", cafeteria);
-                default -> {
-                }
-            }
-        }
-
+        // Adiciona na sessão
+        session.setAttribute("user", user);
+        
         // Redireciona para a página inicial
         response.sendRedirect("/Amantes_Cafezinho/home");
     }

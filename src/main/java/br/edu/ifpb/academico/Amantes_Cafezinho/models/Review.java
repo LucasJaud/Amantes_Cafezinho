@@ -3,7 +3,7 @@ package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -13,7 +13,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date datetime;
+    private LocalDate datetime;
 
     @ManyToOne
     @JoinColumn(name = "cafeteria_id",nullable = false)

@@ -21,9 +21,9 @@ public class AuthController {
     @Autowired
     AuthService authservice;
 
-    @GetMapping("/signin")
-    public ModelAndView signIn(ModelAndView mav) {
-        mav.setViewName("auth/signin");
+    @GetMapping("/login")
+    public ModelAndView logIn(ModelAndView mav) {
+        mav.setViewName("auth/login");
         return mav;
     }
 
@@ -50,22 +50,22 @@ public class AuthController {
     @PostMapping("/register/cafeteria")
     public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("cafeteria") Cafeteria cafeteria, BindingResult result){
         if (result.hasErrors()) {
-            mav.setViewName("auth/signup/cafeteria");
+            mav.setViewName("auth/signup-cafeteria");
             return mav;
         }
         authservice.registerCafeteria(cafeteria);
-        mav.setViewName("redirect:/auth/signin");
+        mav.setViewName("redirect:/auth/login");
         return mav;
     }
 
     @PostMapping("/register/reviewer")
     public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("reviewer") Reviewer reviewer, BindingResult result){
         if (result.hasErrors()) {
-            mav.setViewName("auth/signup/reviewer");
+            mav.setViewName("auth/signup-reviewer");
             return mav;
         }
         authservice.registerReviewer(reviewer);
-        mav.setViewName("redirect:/auth/signin");
+        mav.setViewName("redirect:/auth/login");
         return mav;
     }
 

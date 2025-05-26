@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CafeteriaRepository  extends JpaRepository<Cafeteria, Long>, UserBasedRepository {
-     @Override
+public interface CafeteriaRepository  extends JpaRepository<Cafeteria, Long> {
      Optional<Cafeteria> findByUser(User user);
 
      Optional<Cafeteria> findByCNPJ(String cnpj);

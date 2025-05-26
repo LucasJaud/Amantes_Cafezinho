@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ReviewerRepository extends JpaRepository<Reviewer, Long>, UserBasedRepository {
-    @Override
+public interface ReviewerRepository extends JpaRepository<Reviewer, Long> {
     Optional<Reviewer> findByUser(User user);
 }

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record UserFormDTO(
         // Comum
@@ -25,7 +25,7 @@ public record UserFormDTO(
         String cpf,
         String fullName,
         @DateTimeFormat(pattern = "yyyy-MM-dd")
-        Date birthDate,
+        LocalDate birthDate,
         String sex,
 
         // Cafeteria

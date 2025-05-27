@@ -1,6 +1,8 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -14,6 +16,14 @@ public class Review {
     private Long id;
 
     private LocalDate datetime;
+
+    @Column(nullable = false, length = 300)
+    private String content;
+
+    @Min(1)
+    @Max(5)
+    @Column(nullable = false)
+    private Integer rating;
 
     @ManyToOne
     @JoinColumn(name = "cafeteria_id",nullable = false)

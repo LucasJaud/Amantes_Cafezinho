@@ -6,7 +6,9 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.models.User;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.AdminRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.CafeteriaRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.ReviewerRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TypeUserService {
     @Autowired
     AdminRepository adminRepository;

@@ -24,7 +24,7 @@
              class="bg-[#B0413E] text-white px-4 py-2 rounded-md text-sm">
             <span th:text="${error}">Ocorreu um erro ao criar a avaliação.</span>
         </div>
-        <form th:action="@{/fachada/perfilUnidade/{unitId}/criarAvaliacao(unitId=${unidadeEscolhida.id})}"
+        <form th:action="@{/fachada/criarAvaliacao}"
               method="POST"
               th:object="${Review}"
               class="flex flex-col gap-6">

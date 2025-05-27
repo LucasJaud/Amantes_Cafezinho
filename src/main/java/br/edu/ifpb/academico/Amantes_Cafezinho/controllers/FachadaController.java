@@ -1,14 +1,14 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
 import java.util.Enumeration;
+import java.time.LocalDate;
 import java.util.List;
 
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Review;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,7 +105,49 @@ public class FachadaController {
     }
 
 
+    @PostMapping("/criarAvaliacao")
+    public ModelAndView criarAvaliacao(
+            ModelAndView mav,
+            @Validated @ModelAttribute("Review") Review review,
+            BindingResult result,
+            @RequestParam("unitId") Long unitId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao criar avaliação. Verifique os dados.");
+            mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
 
+            return mav;
+        }
+
+        Unit unidade = fachadaService.resgatarUnidadePorId(unitId);
+
+        if (unidade == null) {
+            redirectAttributes.addFlashAttribute("error", "Unidade não encontrada.");
+            mav.setViewName("redirect:/fachada/listarUnidades");
+
+            return mav;
+        }
+
+        Reviewer loggedUser = (Reviewer) session.getAttribute("ClientLogado");
+
+        if (loggedUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado para avaliar.");
+            mav.setViewName("redirect:/login");
+
+            return mav;
+        }
+
+        review.setUnit(unidade);
+        review.setReviewer(loggedUser);
+        review.setDatetime(LocalDate.now());
+        fachadaService.criarAvaliacao(review);
+        redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
+        mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
+
+        return mav;
+    }
 
 
 

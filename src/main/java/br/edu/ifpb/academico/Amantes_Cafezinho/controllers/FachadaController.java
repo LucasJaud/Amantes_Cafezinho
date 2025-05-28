@@ -1,5 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
+import java.util.Enumeration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class FachadaController {
     @PostMapping("/criarUnidade")
     public ModelAndView criarUnidade
                                     (ModelAndView mav,
-                                    @Validated @ModelAttribute("Unit") Unit unidade,
+                                    @Validated @ModelAttribute("unit") Unit unidade,
                                     BindingResult result, 
                                     HttpSession session,  
                                     RedirectAttributes redirectAttributes){
@@ -36,16 +37,17 @@ public class FachadaController {
         // verifica se o objeto unidade é valido
         // se não for, redireciona para a página de cadastro
         if (result.hasErrors()) {
-             mav.setViewName("redirect:/cadastrUnidade");
+             mav.setViewName("views/cadastrarUnidade");
+             return mav;
         }
 
         // verifica se existe unidade com o mesmo CNPJ, caso não, cria a unidade e resgata o id
         Long IDdaUnidadeCriada = fachadaService.criarUnidade(unidade).getId();
 
         // resgata o CNPJ da cafeteria logada para atualizar o atributo na sessão
-        String CNPJdaCafeteriaLogada = ((Cafeteria) session.getAttribute("CafeteriaLogada")).getCNPJ();
+        String CNPJdaCafeteriaLogada = ((Cafeteria) session.getAttribute("cafeteria")).getCNPJ();
         Cafeteria CafeteriaLogada = fachadaService.resgatarCafeteriaPorCNPJ(CNPJdaCafeteriaLogada);
-        session.setAttribute("CafeteriaLogada", CafeteriaLogada);
+        session.setAttribute("cafeteria", CafeteriaLogada);
 
         // adiciona mensagem de sucesso
         // e redireciona para o perfil da unidade criada
@@ -76,7 +78,7 @@ public class FachadaController {
     @GetMapping("/listarUnidades")
     public ModelAndView listarUnidades(ModelAndView mav, HttpSession session){
         // Resgata a cafeteria logada
-        Cafeteria cafeteriaLogada =(Cafeteria) session.getAttribute("CafeteriaLogada");
+        Cafeteria cafeteriaLogada =(Cafeteria) session.getAttribute("cafeteria");
         
         // Resgata todas as unidades da cafeteria logada
         List<Unit> unidades = fachadaService.resgatarUnidadesPorCafeteria(cafeteriaLogada);
@@ -86,6 +88,18 @@ public class FachadaController {
         
         // Define a view para listar as unidades
         mav.setViewName("views/listarUnidades");
+        
+        return mav;
+    }
+
+
+    @GetMapping("/cadastrarUnidade")
+    public ModelAndView cadastrUnidade(ModelAndView mav, Unit unidade, HttpSession session) {
+
+        Cafeteria cafeteria = (Cafeteria) session.getAttribute("cafeteria");
+        unidade.setCafeteria(cafeteria);
+        mav.addObject("Unidade", unidade);
+        mav.setViewName("views/cadastrarUnidade");
         
         return mav;
     }

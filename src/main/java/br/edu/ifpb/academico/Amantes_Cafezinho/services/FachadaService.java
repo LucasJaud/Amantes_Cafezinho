@@ -19,7 +19,7 @@ public class FachadaService {
 
     public Unit criarUnidade(Unit unidade) {
 
-        unitService.temUnidadeComCnpj(unidade.getCNPJ());
+        unitService.temUnidadeComCnpj(unidade.getCnpj());
         unitService.cadastrarUnidade(unidade);
 
         return unidade;

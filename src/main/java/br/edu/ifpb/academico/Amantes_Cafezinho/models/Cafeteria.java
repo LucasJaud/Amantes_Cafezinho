@@ -24,6 +24,8 @@ public class Cafeteria{
     @Column(unique = true)
     private String CNPJ;
 
+    private String photoPath;
+
     private String socialReason;
 
     private String fantasyName;

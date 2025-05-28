@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.*;
+import br.edu.ifpb.academico.Amantes_Cafezinho.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,8 @@ public class FachadaController {
 
     @Autowired
     private FachadaService fachadaService;
+    @Autowired
+    private ReviewService reviewService;
 
     @PostMapping("/criarUnidade")
     public ModelAndView criarUnidade
@@ -59,13 +62,10 @@ public class FachadaController {
 
     @GetMapping("/perfilUnidade/{id}")
     public ModelAndView perfilUnidade(ModelAndView mav, @PathVariable Long id) {
-        // Resgata a unidade pelo ID
         Unit unidade = fachadaService.resgatarUnidadePorId(id);
-        
-        // Adiciona a unidade ao modelo
+        List<Review> avaliacoes = unidade.getReviews();
         mav.addObject("unidadeEscolhida", unidade);
-        
-        // Define a view para o perfil da unidade
+        mav.addObject("avaliacoes", avaliacoes);
         mav.setViewName("views/perfilUnidade");
         
         return mav;
@@ -126,18 +126,17 @@ public class FachadaController {
             return mav;
         }
 
-        Reviewer loggedUser = (Reviewer) session.getAttribute("ClientLogado");
-
-        if (loggedUser == null) {
-            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado para avaliar.");
+        Reviewer loggedReviewer = fachadaService.buscarReviewerPorUser((User) session.getAttribute("user"));
+        if (loggedReviewer == null) {
+            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado como avaliador para avaliar.");
             mav.setViewName("redirect:/login");
-
             return mav;
         }
 
         review.setUnit(unidade);
-        review.setReviewer(loggedUser);
+        review.setReviewer(loggedReviewer);
         review.setDatetime(LocalDate.now());
+        review.setStatus(reviewService.buscarPorTipo("ativo"));
         fachadaService.criarAvaliacao(review);
         redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
         mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);

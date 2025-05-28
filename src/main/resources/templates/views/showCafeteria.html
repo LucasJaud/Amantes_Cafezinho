@@ -10,7 +10,7 @@
     <title>Perfil da Cafeteria</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50" layout:fragment="content">
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
 <div class="container mx-auto px-4 py-8">
     <!-- Cabeçalho -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
@@ -20,12 +20,13 @@
                 <div class="mr-4">
                     <!-- Imagem do perfil (substitua por uma imagem real da cafeteria) -->
                     <div class="w-24 h-24 rounded-full bg-amber-200 border-4 border-white -mt-12 flex items-center justify-center text-amber-800 text-2xl font-bold">
-                        <span th:text="${cafeteria.fantasyName}"></span>
+<!--                        <span th:text="${cafeteria.fantasyName}"></span>-->
+                        <img th:src="@{/images/cafezinho_simples.png}" class="w-full h-full object-cover overflow-hidden rounded-full" alt="default_image">
                     </div>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800" th:text="${cafeteria.fantasyName}"></h1>
-                    <p class="text-gray-600" th:text="${cafeteria.socialReason}"></p>
+                    <h1 class="text-2xl font-bold text-[#4B2E2B]" th:text="${cafeteria.fantasyName}"></h1>
+                    <p class="text-[#4B2E2B]" th:text="${cafeteria.socialReason}"></p>
                 </div>
             </div>
             <div class="mt-4 flex flex-wrap gap-4">
@@ -44,7 +45,7 @@
     <!-- Seção de Unidades -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-800">Unidades</h2>
+            <h2 class="text-xl font-semibold text-[#4B2E2B]">Unidades</h2>
         </div>
         <div class="divide-y divide-gray-200">
             <div th:each="unit : ${cafeteria.units}" class="p-6 hover:bg-gray-50 transition-colors">
@@ -65,7 +66,7 @@
                     </a>
                 </div>
             </div>
-            <div th:if="${cafeteria.units.empty}" class="p-6 text-center text-gray-500">
+            <div th:if="${cafeteria.units.isEmpty()}" class="p-6 text-center text-[#4B2E2B]">
                 Nenhuma unidade cadastrada
             </div>
         </div>
@@ -74,11 +75,11 @@
     <!-- Botões de ação -->
     <div class="flex justify-end gap-4">
         <a th:href="@{/cafeterias/{id}/edit(id=${cafeteria.id})}"
-           class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition-colors">
+           class="bg-[#C98A4B] hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition-colors">
             Editar Perfil
         </a>
-        <a th:href="@{/cafeterias/{id}/units/new(id=${cafeteria.id})}"
-           class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+        <a th:href="@{fachada/criarUnidade}"
+           class="bg-[#6B8E23] hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
             Adicionar Unidade
         </a>
     </div>

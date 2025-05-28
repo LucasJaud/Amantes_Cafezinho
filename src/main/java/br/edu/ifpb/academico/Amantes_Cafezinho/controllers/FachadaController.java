@@ -1,19 +1,21 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
 import java.util.Enumeration;
-import java.time.LocalDate;
 import java.util.List;
 
-import br.edu.ifpb.academico.Amantes_Cafezinho.models.*;
-import br.edu.ifpb.academico.Amantes_Cafezinho.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Unit;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.FachadaService;
 import jakarta.servlet.http.HttpSession;
 
@@ -23,8 +25,6 @@ public class FachadaController {
 
     @Autowired
     private FachadaService fachadaService;
-    @Autowired
-    private ReviewService reviewService;
 
     @PostMapping("/criarUnidade")
     public ModelAndView criarUnidade
@@ -62,10 +62,13 @@ public class FachadaController {
 
     @GetMapping("/perfilUnidade/{id}")
     public ModelAndView perfilUnidade(ModelAndView mav, @PathVariable Long id) {
+        // Resgata a unidade pelo ID
         Unit unidade = fachadaService.resgatarUnidadePorId(id);
-        List<Review> avaliacoes = unidade.getReviews();
+        
+        // Adiciona a unidade ao modelo
         mav.addObject("unidadeEscolhida", unidade);
-        mav.addObject("avaliacoes", avaliacoes);
+        
+        // Define a view para o perfil da unidade
         mav.setViewName("views/perfilUnidade");
         
         return mav;
@@ -101,75 +104,9 @@ public class FachadaController {
         return mav;
     }
 
-    @PostMapping("/perfilUnidade/{unitId}/criarAvaliacao")
-    public ModelAndView criarAvaliacao(
-            ModelAndView mav,
-            @Validated @ModelAttribute("Review") Review review,
-            BindingResult result,
-            @PathVariable Long unitId,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
-    ) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Erro ao criar avaliação. Verifique os dados.");
-            mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
 
-            return mav;
-        }
 
-        Unit unidade = fachadaService.resgatarUnidadePorId(unitId);
 
-        if (unidade == null) {
-            redirectAttributes.addFlashAttribute("error", "Unidade não encontrada.");
-            mav.setViewName("redirect:/fachada/listarUnidades");
 
-            return mav;
-        }
-
-        Reviewer loggedReviewer = fachadaService.buscarReviewerPorUser((User) session.getAttribute("user"));
-        if (loggedReviewer == null) {
-            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado como avaliador para avaliar.");
-            mav.setViewName("redirect:/login");
-            return mav;
-        }
-
-        review.setUnit(unidade);
-        review.setReviewer(loggedReviewer);
-        review.setDatetime(LocalDate.now());
-        review.setStatus(reviewService.buscarPorTipo("ativo"));
-        fachadaService.criarAvaliacao(review);
-        redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
-        mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
-
-        return mav;
-    }
-
-    @GetMapping("/perfilUnidade/{unitId}/criarAvaliacao")
-    public ModelAndView getFormularioAvaliacao(
-            ModelAndView mav,
-            @PathVariable Long unitId,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
-        Reviewer loggedReviewer = fachadaService.buscarReviewerPorUser((User) session.getAttribute("user"));
-        if (loggedReviewer == null) {
-            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado como avaliador para avaliar.");
-            mav.setViewName("redirect:/login");
-            return mav;
-        }
-
-        Unit unidade = fachadaService.resgatarUnidadePorId(unitId);
-        if (unidade == null) {
-            redirectAttributes.addFlashAttribute("error", "Unidade não encontrada.");
-            mav.setViewName("redirect:/fachada/listarUnidades");
-            return mav;
-        }
-
-        mav.addObject("Review", new Review());
-        mav.addObject("unidadeEscolhida", unidade);
-        mav.setViewName("review/formulario-avaliacao");
-
-        return mav;
-    }
 
 }

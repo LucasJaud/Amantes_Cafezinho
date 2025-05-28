@@ -28,6 +28,6 @@ public class Cafeteria{
 
     private String fantasyName;
 
-    @OneToMany(mappedBy = "cafeteria", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafeteria",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Unit> units;
 }

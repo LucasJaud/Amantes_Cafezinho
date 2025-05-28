@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface UnitRepository extends JpaRepository<Unit, Long>{
 
-    Optional<Unit> findByCNPJ(String cnpj);
+    Optional<Unit> findByCnpj(String cnpj);
 
     List<Unit> findByCafeteria(Cafeteria cafeteria);
 

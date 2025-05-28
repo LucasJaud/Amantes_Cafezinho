@@ -22,7 +22,7 @@ public class UnitService {
 
     public boolean temUnidadeComCnpj(String cnpj) throws CNPJExistente{
 
-        if (unitRepository.findByCNPJ(cnpj).isPresent() || cafeteriaRepository.findByCNPJ(cnpj).isPresent()) {
+        if (unitRepository.findByCnpj(cnpj).isPresent() || cafeteriaRepository.findByCNPJ(cnpj).isPresent()) {
             throw new CNPJExistente();
         }
         

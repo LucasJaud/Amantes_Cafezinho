@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Unidades</title>
 </head>
-<body>
-    <h1>A implementar...</h1>
+<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+    <header class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
+    </header>
+    <main class="flex flex-1 flex-col h-full justify-center items-center mb-8">
+        <div class="flex flex-col gap-2 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+            <h2 th:text="'Unidades do(a) ' + ${session.cafeteria.fantasyName}" class="text-3xl font-bold text-[#4B2E2B]"></h2>
+            <div class="overflow-x-auto max-h-64 overflow-y-auto mt-6 rounded-lg">
+                <table class="min-w-full text-sm text-left text-zinc-700 border-separate border-spacing-y-2">
+                    <thead>
+                        <tr class="text-xs uppercase text-zinc-500 tracking-wider">
+                            <th class="px-6 py-3 bg-zinc-100 rounded-l-lg">Nome da Unidade</th>
+                            <th class="px-6 py-3 bg-zinc-100 rounded-r-lg">Visitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="unidade : ${unidades}" class="bg-white shadow rounded-lg">
+                            <td class="px-6 py-4 rounded-l-lg text-zinc-800">
+                                <strong class="font-bold" th:text="${unidade.name}"></strong>
+                            </td>
+                            <td class="px-6 py-4 rounded-r-lg">
+                                <a th:href="@{/fachada/perfilUnidade/{id}(id=${unidade.id})}"
+                                class="inline-block bg-[#4B2E2B] text-white px-4 py-2 rounded-md text-sm hover:bg-[#3b231f] transition" style="background-color: #C98A4B;"
+                                onmouseover="this.style.backgroundColor='#A3723D'"
+                                onmouseout="this.style.backgroundColor='#C98A4B'">
+                                    Ver Perfil
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>   
+    </main>
 </body>
-</html>

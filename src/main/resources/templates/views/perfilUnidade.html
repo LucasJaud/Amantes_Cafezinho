@@ -1,13 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Unidade</title>
 </head>
-<body>
-
-    <h1>A implementar...</h1>
-    
+<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+    <header class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
+    </header>
+    <main class="flex flex-1 flex-col h-full justify-center items-center mb-8">
+        <div class="flex flex-col gap-2 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+            <div class="flex justify-between">
+                <h2 class="text-3xl font-bold text-[#4B2E2B]">
+                    Unidade 
+                </h2>
+                <div>
+                    <img th:src="${unidadeEscolhida.isActive} ? @{/dist/icons/ativo.svg} : @{/dist/icons/inativo.svg}" alt="Status" class="w-6 h-6" />
+                </div>
+                </div>
+                <strong class="mb-5"  th:text="${unidadeEscolhida.name}"></strong>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold text-[#4B2E2B] uppercase tracking-wide">
+                        CNPJ
+                    </label>
+                    <span class="text-sm text-[#4B2E2B] bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                        <span th:text="${unidadeEscolhida.cnpj}"></span>
+                    </span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold text-[#4B2E2B] uppercase tracking-wide">
+                        Matriz
+                    </label>
+                    <span class="text-sm text-[#4B2E2B] bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                        <span th:text="${unidadeEscolhida.cafeteria.fantasyName}"></span>
+                    </span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold text-[#4B2E2B] uppercase tracking-wide">
+                        Categoria de preços
+                    </label>
+                    <span class="text-sm text-[#4B2E2B] bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                        <span th:text="${unidadeEscolhida.priceCategory}"></span>
+                    </span>
+                </div>
+                <div class="flex justify-between gap-4 mt-8">
+                    <a th:href="@{/fachada/listarUnidades}"
+                        class="flex-1 text-white px-6 py-2 rounded-lg font-medium transition text-center"
+                        style="background-color: #C98A4B;"
+                        onmouseover="this.style.backgroundColor='#A3723D'"
+                        onmouseout="this.style.backgroundColor='#C98A4B'">
+                            Voltar
+                    </a>
+                    <a
+                        class="flex-1 text-white px-6 py-2 rounded-lg font-medium transition text-center"
+                        style="background-color: #C98A4B;"
+                        onmouseover="this.style.backgroundColor='#A3723D'"
+                        onmouseout="this.style.backgroundColor='#C98A4B'">
+                            Fazer avaliação
+                    </a>
+                </div>
+        </div>
+    </main>
 </body>
-</html>

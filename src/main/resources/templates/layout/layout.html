@@ -15,14 +15,14 @@
 
 </head>
 <body>
-<div class="flex min-h-screen">
-    <div class="w-full flex flex-row ">
-        <div th:replace="~{fragments/header :: header}"></div>
-        <div class="flex-1" layout:fragment="content">
+<div class="flex flex-col min-h-screen bg-gray-100">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <main class="flex-grow">
+        <div layout:fragment="content">
             <!--/* Aqui o conteúdo será injetado */-->
         </div>
-        <div th:replace="~{fragments/footer :: footer}"></div>
-    </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
 </html>

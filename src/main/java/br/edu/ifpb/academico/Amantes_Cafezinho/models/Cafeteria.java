@@ -20,9 +20,11 @@ public class Cafeteria{
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @CNPJ
+//    @CNPJ
     @Column(unique = true)
     private String CNPJ;
+
+    private String photoPath;
 
     private String socialReason;
 

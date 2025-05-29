@@ -13,7 +13,7 @@
                         </a>
                     </li>
                     <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200"  sec:authorize="hasRole('CAFETERIA')" >
-                        <a th:href="@{/cafeteria/{cnpj}}"  class="flex items-center">
+                        <a th:href="@{/cafeteria/{cnpj}(cnpj=${cafeteria.CNPJ})}"  class="flex items-center">
                             Cafeteria
                         </a>
                     </li>

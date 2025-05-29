@@ -33,7 +33,7 @@ public class CafeteriaController {
     private UserRepository userRepository;
 
     @GetMapping("/{cnpj}")
-    public ModelAndView cafeteriaView(ModelAndView mav,@PathVariable String cnpj) {
+    public ModelAndView cafeteriaView(ModelAndView mav, @PathVariable String cnpj, HttpSession session) {
         Cafeteria cafeteria = service.resgatarCafeteriaPorCNPJ(cnpj);
         mav.addObject("cafeteria", cafeteria);
         mav.setViewName("views/showCafeteria");

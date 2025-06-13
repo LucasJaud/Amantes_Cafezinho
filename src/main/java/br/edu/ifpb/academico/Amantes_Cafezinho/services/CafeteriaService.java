@@ -60,4 +60,6 @@ public class CafeteriaService {
         cafeteria.setPhotoPath("/uploads/" + uniqueFileName);
         this.save(cafeteria);
     }
+
+    public Cafeteria buscarPorUser(User user) {return cafeteriaRepository.findByUser(user).orElse(null);}
 }

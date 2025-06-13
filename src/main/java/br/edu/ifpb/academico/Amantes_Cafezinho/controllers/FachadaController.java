@@ -75,14 +75,14 @@ public class FachadaController {
     @GetMapping("/listarUnidades")
     public ModelAndView listarUnidades(ModelAndView mav, HttpSession session){
         // Resgata a cafeteria logada
-        Cafeteria cafeteriaLogada =(Cafeteria) session.getAttribute("cafeteria");
-        
+        Cafeteria cafeteriaLogada = fachadaService.buscarCafeteriaPorUser((User) session.getAttribute("user"));
         // Resgata todas as unidades da cafeteria logada
         List<Unit> unidades = fachadaService.resgatarUnidadesPorCafeteria(cafeteriaLogada);
         
         // Adiciona as unidades ao modelo
         mav.addObject("unidades", unidades);
-        
+        mav.addObject("cafeteria", cafeteriaLogada);
+
         // Define a view para listar as unidades
         mav.setViewName("views/listarUnidades");
         

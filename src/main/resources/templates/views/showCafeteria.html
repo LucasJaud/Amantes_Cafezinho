@@ -52,15 +52,9 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="text-lg font-medium text-gray-800" th:text="${unit.name}"></h3>
-                        <p class="text-gray-600 mt-1" th:text="${unit.address}"></p>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                                <span th:each="feature : ${unit.features}"
-                                      class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded">
-                                    <span th:text="${feature}"></span>
-                                </span>
-                        </div>
+                        <p class="text-gray-600 mt-1" th:text="${unit.cnpj}"></p>
                     </div>
-                    <a th:href="@{/units/{id}(id=${unit.id})}"
+                    <a th:href="@{/fachada/perfilUnidade/{unitId}(unitId=${unit.id})}"
                        class="text-amber-600 hover:text-amber-800 font-medium">
                         Ver detalhes →
                     </a>
@@ -73,7 +67,7 @@
     </div>
 
     <!-- Botões de ação -->
-    <div class="flex justify-end gap-4">
+    <div class="flex justify-end gap-4" sec:authorize="hasRole('CAFETERIA')">
         <a th:href="@{/cafeterias/{id}/edit(id=${cafeteria.id})}"
            class="bg-[#C98A4B] hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition-colors">
             Editar Perfil

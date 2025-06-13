@@ -41,5 +41,9 @@ public class Unit {
     @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;
 
+    @Override
+    public String toString() {
+        return name != null ? name : "No name";
+    }
     
 }

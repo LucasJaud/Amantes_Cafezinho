@@ -49,9 +49,9 @@ public class FachadaService {
 
         List<Unit> unidadesResgatadas = unitService.resgatarUnidadesPorCafeteria(cafeteria);
 
-        if (unidadesResgatadas.isEmpty()) {
-            throw new CafeteriaSemUnidades();
-        }
+//        if (unidadesResgatadas.isEmpty()) {
+//            throw new CafeteriaSemUnidades();
+//        }
 
         return unidadesResgatadas;
 
@@ -63,5 +63,9 @@ public class FachadaService {
 
     public Reviewer buscarReviewerPorUser(User user) {
         return reviewerService.buscarPorUser(user);
+    }
+
+    public Cafeteria buscarCafeteriaPorUser(User user) {
+        return cafeteriaService.buscarPorUser(user);
     }
 }

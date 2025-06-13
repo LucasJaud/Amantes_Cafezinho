@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Avaliação</title>
+</head>
+<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+<header class="flex justify-between items-center">
+    <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
+</header>
+
+<main class="flex flex-1 w-full h-full justify-center items-center">
+    <div class="flex flex-col gap-8 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+        <div class="flex flex-col gap-1 text-center">
+            <h2 class="text-3xl font-bold text-[#4B2E2B]">
+                Avaliar <span th:text="${unidadeEscolhida.name}">Nome da Unidade</span>
+            </h2>
+            <p class="text-[#A89F91] text-base">Deixe sua opinião sobre esta unidade</p>
+        </div>
+        <div th:if="${success}"
+             class="bg-[#7bb662] text-white px-4 py-2 rounded-md text-sm">
+            <span th:text="${success}">Avaliação criada com sucesso!</span>
+        </div>
+        <div th:if="${error}"
+             class="bg-[#B0413E] text-white px-4 py-2 rounded-md text-sm">
+            <span th:text="${error}">Ocorreu um erro ao criar a avaliação.</span>
+        </div>
+        <form th:action="@{/fachada/perfilUnidade/{unitId}/criarAvaliacao(unitId=${unidadeEscolhida.id})}"
+              method="POST"
+              th:object="${Review}"
+              class="flex flex-col gap-6">
+            <div th:if="${#fields.hasErrors()}"
+                 class="bg-[#B0413E] text-white px-4 py-2 rounded-md text-sm">
+                Por favor, corrija os erros no formulário.
+            </div>
+            <input type="hidden" name="unitId" th:value="${unidadeEscolhida.id}" />
+
+            <div class="flex flex-col gap-1">
+                <label for="content" class="font-medium">Conteúdo</label>
+                <textarea id="content" name="content"
+                          th:field="*{content}"
+                          rows="4"
+                          placeholder="Conte como foi sua experiência..."
+                          maxlength="300"
+                          class="border border-zinc-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#C98A4B]"></textarea>
+                <p th:if="${#fields.hasErrors('content')}"
+                   th:errors="*{content}"
+                   class="text-sm text-[#B0413E]"></p>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label class="text-[#4B2E2B] font-semibold">Avaliação:</label>
+                <div class="flex flex-row justify-start star-rating">
+                    <input type="radio" th:field="*{rating}" value="1" id="star1"
+                           class="hidden peer" required />
+                    <label for="star1"
+                           class="cursor-pointer text-3xl text-[#C98A4B] peer-checked:text-[#F5EBDD] hover:text-[#F5EBDD]">
+                        ★
+                    </label>
+
+                    <input type="radio" th:field="*{rating}" value="2" id="star2"
+                           class="hidden peer" />
+                    <label for="star2"
+                           class="cursor-pointer text-3xl text-[#C98A4B] peer-checked:text-[#F5EBDD] hover:text-[#F5EBDD]">
+                        ★
+                    </label>
+
+                    <input type="radio" th:field="*{rating}" value="3" id="star3"
+                           class="hidden peer" />
+                    <label for="star3"
+                           class="cursor-pointer text-3xl text-[#C98A4B] peer-checked:text-[#F5EBDD] hover:text-[#F5EBDD]">
+                        ★
+                    </label>
+
+                    <input type="radio" th:field="*{rating}" value="4" id="star4"
+                           class="hidden peer" />
+                    <label for="star4"
+                           class="cursor-pointer text-3xl text-[#C98A4B] peer-checked:text-[#F5EBDD] hover:text-[#F5EBDD]">
+                        ★
+                    </label>
+
+                    <input type="radio" th:field="*{rating}" value="5" id="star5"
+                           class="hidden peer" />
+                    <label for="star5"  
+                           class="cursor-pointer text-3xl text-[#C98A4B] peer-checked:text-[#F5EBDD] hover:text-[#F5EBDD]">
+                        ★
+                    </label>
+                </div>
+            </div>
+            <div class="flex justify-between gap-4">
+                <a th:href="@{/fachada/perfilUnidade/{id}(id=${unidadeEscolhida.id})}"
+                   class="bg-[#B0413E] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#8c3331] transition">
+                    Cancelar
+                </a>
+                <button type="submit"
+                        class="bg-[#6B8E23] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#55731b] transition">
+                    Enviar Avaliação
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

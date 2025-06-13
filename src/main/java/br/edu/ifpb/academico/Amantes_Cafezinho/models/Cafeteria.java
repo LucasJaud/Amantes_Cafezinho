@@ -4,25 +4,32 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 
-@Entity(name = "Cafeteria")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class Cafeteria extends User {
-
+public class Cafeteria{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
+//    @CNPJ
+    @Column(unique = true)
     private String CNPJ;
+
+    private String photoPath;
 
     private String socialReason;
 
     private String fantasyName;
 
-    @OneToMany(mappedBy = "cafeteria", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cafeteria",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Unit> units;
 }

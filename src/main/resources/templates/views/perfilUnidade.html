@@ -1,13 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Unidade</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
-<body>
+<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+<header class="flex justify-between items-center">
+    <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
+</header>
 
-    <h1>A implementar...</h1>
-    
+<!-- Alerta de sucesso -->
+<div x-data="{ show: true }" x-show="show"
+     x-init="setTimeout(() => show = false, 3000)"
+     th:if="${success != null}"
+     class="fixed top-4 right-4 bg-[#7bb662] text-white px-4 py-2 rounded-lg shadow-lg z-50">
+    <span th:text="${success}">Avaliação criada com sucesso!</span>
+</div>
+
+<!-- Alerta de erro -->
+<div x-data="{ show: true }" x-show="show"
+     x-init="setTimeout(() => show = false, 3000)"
+     th:if="${error != null}"
+     class="fixed top-4 right-4 bg-[#B0413E] text-white px-4 py-2 rounded-lg shadow-lg z-50">
+    <span th:text="${error}">Erro ao criar avaliação.</span>
+</div>
+
+<main class="flex flex-1 flex-col items-center mb-8 mt-10 px-4">
+    <div class="flex flex-col gap-6 max-w-[960px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+
+        <!-- Quadro da unidade -->
+        <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-bold">Unidade</h2>
+                <img th:src="${unidadeEscolhida.isActive} ? @{/dist/icons/ativo.svg} : @{/dist/icons/inativo.svg}" alt="Status" class="w-6 h-6" />
+            </div>
+            <strong class="text-2xl mb-4" th:text="${unidadeEscolhida.name}"></strong>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold uppercase tracking-wide">
+                        CNPJ
+                    </label>
+                    <span class="text-sm bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                            <span th:text="${unidadeEscolhida.cnpj}"></span>
+                        </span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold uppercase tracking-wide">
+                        Matriz
+                    </label>
+                    <span class="text-sm bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                            <span th:text="${unidadeEscolhida.cafeteria.fantasyName}"></span>
+                        </span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-semibold uppercase tracking-wide">
+                        Categoria de preços
+                    </label>
+                    <span class="text-sm bg-[#f8f6f5] border border-[#4B2E2B] rounded-md px-4 py-2 shadow-sm">
+                            <span th:text="${unidadeEscolhida.priceCategory}"></span>
+                        </span>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="flex justify-between gap-4 mt-6">
+                <a th:href="@{/cafeteria/{cafeteriaCNPJ}(cafeteriaCNPJ=${unidadeEscolhida.cafeteria.CNPJ})}"
+                   class="flex-1 text-white px-6 py-2 rounded-lg font-medium transition text-center"
+                   style="background-color: #C98A4B;"
+                   onmouseover="this.style.backgroundColor='#A3723D'"
+                   onmouseout="this.style.backgroundColor='#C98A4B'">
+                    Voltar
+                </a>
+                <a th:href="@{/fachada/perfilUnidade/{id}/criarAvaliacao(id=${unidadeEscolhida.id})}"
+                   sec:authorize="hasRole('REVIEWER')"
+                   class="flex-1 text-white px-6 py-2 rounded-lg font-medium transition text-center"
+                   style="background-color: #C98A4B;"
+                   onmouseover="this.style.backgroundColor='#A3723D'"
+                   onmouseout="this.style.backgroundColor='#C98A4B'">
+                    Fazer avaliação
+                </a>
+            </div>
+        </div>
+
+        <!-- Listagem de Avaliações -->
+        <div class="flex flex-col gap-4">
+            <h3 class="text-2xl font-bold">Avaliações</h3>
+
+            <div th:if="${avaliacoes.size() == 0}" class="text-[#A89F91]">
+                Nenhuma avaliação encontrada.
+            </div>
+
+            <!-- Grid para colocar 2 por linha no desktop -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div th:each="avaliacao : ${avaliacoes}"
+                     class="flex flex-col gap-2 border border-[#4B2E2B] rounded-lg p-4 bg-[#f8f6f5] shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <strong class="text-lg" th:text="${avaliacao.reviewer}">Usuário</strong>
+                        <span class="text-sm text-[#A89F91]"
+                              th:text="${#temporals.format(avaliacao.datetime, 'dd/MM/yyyy')}">Data</span>
+                    </div>
+
+                    <!-- Nota em formato de estrelas -->
+                    <div class="flex flex-col gap-1">
+                        <span class="text-sm font-semibold">Nota:</span>
+                        <div class="flex flex-row">
+                    <span th:each="i : ${#numbers.sequence(1,5)}"
+                          th:text="'★'"
+                          th:classappend="${i <= avaliacao.rating} ? 'text-[#C98A4B]' : 'text-[#F5EBDD]'"
+                          class="text-2xl">
+                    </span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <span class="text-sm font-semibold">Comentário:</span>
+                        <p class="text-base" th:text="${avaliacao.content}"></p>
+                    </div>
+
+                    <!-- Ícone de comentário com contador -->
+                    <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M2.25 12.75c0 .621.504 1.125 1.125 1.125h.75v3.375L7.5 13.875h9.375c.621 0 1.125-.504
+                          1.125-1.125v-7.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125
+                          1.125v7.5z"/>
+                        </svg>
+                        <span th:text="${avaliacao.comments.size()}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
 </body>
 </html>

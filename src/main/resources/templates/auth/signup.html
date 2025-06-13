@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Escolha o tipo de cadastro</title>
+</head>
+<body class="px-10 pt-10 flex flex-col min-h-screen bg-zinc-50 text-zinc-900">
+<header class="flex justify-between items-center">
+    <h1 class="text-5xl font-bold text-brown-800">Amantes do Cafezinho</h1>
+    <a th:href="@{/auth/login}"
+       class="w-[212px] h-[56px] flex justify-center items-center bg-amber-800 text-white text-xl rounded hover:bg-amber-900 transition-colors"
+       role="button">Fazer Login</a>
+</header>
+
+<main class="mt-20 flex flex-col items-center gap-10">
+    <h2 class="text-3xl font-semibold text-brown-800 mb-6">Escolha o tipo de cadastro</h2>
+
+    <div class="flex gap-8">
+        <a th:href="@{/auth/signup/reviewer}"
+           class="w-80 h-60 flex flex-col justify-center items-center bg-white rounded-lg shadow-md border border-zinc-300 text-center hover:bg-amber-100 transition-colors cursor-pointer">
+            <span class="text-5xl mb-4">☕</span>
+            <span class="text-xl font-medium">Quero ser Avaliador</span>
+        </a>
+
+        <a th:href="@{/auth/signup/cafeteria}"
+           class="w-80 h-60 flex flex-col justify-center items-center bg-white rounded-lg shadow-md border border-zinc-300 text-center hover:bg-amber-100 transition-colors cursor-pointer">
+            <span class="text-5xl mb-4">🏪</span>
+            <span class="text-xl font-medium">Cadastrar minha Cafeteria</span>
+        </a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Perfil da unidade</title>
+</head>
+<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+    <header class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
+    </header>
+    <main class="flex flex-1 flex-col h-full justify-center items-center mb-8">
+            <div th:if="${error}">
+                <div class="flex items-center justify-center ">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded shadow-md text-center max-w-md w-full mb-8">
+                        <strong class="text-lg font-semibold block mb-2">Erro</strong>
+                        <p>Este CNPJ já foi cadastrado!</p>
+                    </div>
+                </div>
+            </div>
+        <div class="flex flex-col gap-2 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+            <h2 class="text-3xl font-bold text-[#4B2E2B]">
+                Cadastrar unidade 
+            </h2>
+            <strong class="mb-5" th:text="'Matriz ' + ${session.cafeteria.fantasyName}"></strong>
+            <form th:action="@{/fachada/criarUnidade}" method="POST"  th:object="${unit}" class="flex flex-col gap-6">
+                <div class="flex items-center gap-1">
+                    <label for="cnpj" class="font-medium">CNPJ</label>
+                    <input type="text" th:field="*{cnpj}" id="cnpj" placeholder="00.000.000/0001-00" class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
+                </div>
+                <div class="flex items-center gap-1">
+                    <label for="name" class="font-medium">Nome</label>
+                    <input type="text" id="nome" th:field="*{name}" placeholder="Bom café - Ruy Carneiro" class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
+                </div>
+                <div class="flex flex-1 flex-col gap-1">
+                    <label for="categoria" class="font-medium">Categoria de preços</label>
+                    <input type="text" th:field="*{priceCategory}" id="categoria" placeholder="Acessível" class="border border-gray-300 text-sm rounded-lg w-full p-2.5">
+                </div>
+                <input type="hidden" th:field="*{cafeteria.id}" />
+                <button type="submit"
+                        class="bg-[#6B8E23] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#55731b] transition">
+                    Cadastrar unidade
+                </button>
+            </form>
+        </div>
+    </main>
+</body>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="pt_BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head layout:fragment="head">
+    <meta charset="UTF-8">
+    <title layout:title="Base Layout">Amantes do cafezinho</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/@material-tailwind/html@2.3.2/scripts/dialog.js" defer></script>
+
+
+</head>
+<body>
+<div class="flex flex-col min-h-screen bg-[#F5EBDD] text-[#4B2E2B]">
+    <div th:replace="~{fragments/header :: header}"></div>
+    <main class="flex-grow">
+        <div layout:fragment="content">
+            <!--/* Aqui o conteúdo será injetado */-->
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+</body>
+</html>

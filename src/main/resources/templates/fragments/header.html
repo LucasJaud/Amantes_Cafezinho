@@ -17,6 +17,11 @@
                             Cafeteria
                         </a>
                     </li>
+                    <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200"  sec:authorize="hasRole('REVIEWER')" >
+                        <a th:href="@{/avaliador}"  class="flex items-center">
+                            Avaliador
+                        </a>
+                    </li>
                     <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200">
                         <a href="#" class="flex items-center">
                             Support

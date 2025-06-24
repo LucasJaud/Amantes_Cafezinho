@@ -6,12 +6,13 @@ import java.util.List;
 
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.*;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.ReviewService;
+import ch.qos.logback.core.model.Model;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.FachadaService;
@@ -169,6 +170,18 @@ public class FachadaController {
         mav.addObject("unidadeEscolhida", unidade);
         mav.setViewName("review/formulario-avaliacao");
 
+        return mav;
+    }
+
+    @PostMapping("/excluirReview")
+    public ModelAndView excluirReview(
+            @RequestParam("reviewId") Long reviewId,
+            @RequestParam("cafeteriaId") Long cafeteriaId,
+            ModelAndView mav
+            ) {
+
+        fachadaService.excluirReview(reviewId);
+        mav.setViewName("redirect:/fachada/perfilUnidade/" + cafeteriaId);
         return mav;
     }
 

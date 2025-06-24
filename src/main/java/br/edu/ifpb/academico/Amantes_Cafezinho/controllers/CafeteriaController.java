@@ -46,4 +46,18 @@ public class CafeteriaController {
         service.savePhoto(cafeteria, file);
         return "redirect:/cafeteria/"+cafeteria.getCNPJ();
     }
+
+    @GetMapping("/listarCafeterias")
+    public ModelAndView listarCafeterias(ModelAndView mav, @RequestParam(required = false) String nome) {
+
+        if(nome == null || nome.isEmpty()) {
+            mav.addObject("cafeterias", service.listarCafeterias());
+        } else {
+            mav.addObject("cafeterias", service.listarCafeteriasPorNome(nome));
+        }
+
+        mav.setViewName("views/listarCafeterias");
+        return mav;
+
+    }
 }

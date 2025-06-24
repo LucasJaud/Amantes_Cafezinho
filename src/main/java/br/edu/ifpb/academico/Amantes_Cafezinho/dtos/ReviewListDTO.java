@@ -11,7 +11,7 @@ public record ReviewListDTO(
         @NotNull
         Long id,
         @NotBlank
-        String unit,
+        String unitName,
         @NotBlank
         String content,
         @NotNull

@@ -1,5 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
+import br.edu.ifpb.academico.Amantes_Cafezinho.dtos.ReviewListDTO;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Review;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.User;
@@ -11,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/avaliador")
@@ -31,8 +34,10 @@ public class ReviewerController {
     public ModelAndView mostrarPerfil(ModelAndView mav, HttpSession session){
         User user = (User) session.getAttribute( "user");
         Reviewer reviewer = reviewerService.buscarPorUser(user);
+        List<ReviewListDTO> reviews = reviewService.listarPorAvaliador(reviewer);
 
         mav.addObject("reviewer", reviewer);
+        mav.addObject("reviews", reviews);
         mav.setViewName("reviewer/perfilAvaliador");
 
         return mav;

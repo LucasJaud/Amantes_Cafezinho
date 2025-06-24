@@ -55,11 +55,11 @@
         <div class="bg-white shadow-lg rounded-lg p-6 mt-8">
             <h2 class="text-2xl font-semibold text-[#4B2E2B] mb-4">Minhas Avaliações</h2>
 
-            <div th:if="${#lists.isEmpty(reviewer?.review)}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div th:if="${#lists.isEmpty(reviews) and !error}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">Você ainda não possui avaliações registradas.</span>
             </div>
 
-            <div th:if="${!#lists.isEmpty(reviewer?.review)}" class="overflow-x-auto">
+            <div th:if="${!#lists.isEmpty(reviews)}" class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300 rounded-md">
                     <thead class="bg-gray-100">
                     <tr>
@@ -71,8 +71,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="reviewItem : ${reviewer.review}" class="hover:bg-gray-50">
-                        <td class="py-3 px-4 border-b" th:text="${reviewItem.unit}">Nome da Unidade</td>
+                    <tr th:each="reviewItem : ${reviews}" class="hover:bg-gray-50">
+                        <td class="py-3 px-4 border-b" th:text="${reviewItem.unitName}">Nome da Unidade</td>
                         <td class="py-3 px-4 border-b" th:text="${reviewItem.rating}">5</td>
                         <td class="py-3 px-4 border-b" th:text="${reviewItem.content}">Conteúdo da Avaliação</td>
                         <td class="py-3 px-4 border-b" th:text="${#temporals.format(reviewItem.datetime, 'dd/MM/yyyy')}">dd/MM/yyyy</td>
@@ -121,6 +121,7 @@
     </div>
 
     <script th:inline="javascript">
+        /*<![CDATA[*/
         function openEditModal(button) {
             const id = button.getAttribute('data-id');
             const rating = button.getAttribute('data-rating');
@@ -176,6 +177,7 @@
                 alert('Erro ao atualizar avaliação: ' + error.message);
             });
         });
+        /*]]>*/
     </script>
 </div>
 </body>

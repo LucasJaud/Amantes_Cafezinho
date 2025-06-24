@@ -34,4 +34,8 @@ public class ReviewService {
     public Status buscarPorTipo(String tipo) {
         return statusRepository.findByType(tipo);
     }
+
+    public void excluirReview(Long unidade) {
+        reviewRepository.deleteById(unidade);
+    }
 }

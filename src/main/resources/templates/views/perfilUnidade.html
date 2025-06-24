@@ -130,6 +130,13 @@
                         </svg>
                         <span th:text="${avaliacao.comments.size()}"></span>
                     </div>
+                    <div sec:authorize="hasRole('REVIEWER')" th:if="${#authentication.principal.id == avaliacao.reviewer.id}">
+                            <form  th:action="@{/fachada/excluirReview}" method="post">
+                                <input type="hidden" name="reviewId" th:value="${avaliacao.id}"/>
+                                <input type="hidden" name="cafeteriaId" th:value="${unidadeEscolhida.id}"/>
+                                <button type="submit" class="text-red-500">Remover avaliação</button>
+                            </form>
+                    </div>
                 </div>
             </div>
         </div>

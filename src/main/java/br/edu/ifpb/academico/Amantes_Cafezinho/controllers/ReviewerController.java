@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/avaliador")
-//@PreAuthorize("hasRole('REVIEWER')")
+@PreAuthorize("hasRole('REVIEWER')")
 public class ReviewerController {
 
     private final ReviewerService reviewerService;

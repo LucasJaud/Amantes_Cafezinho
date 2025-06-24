@@ -3,19 +3,20 @@ package br.edu.ifpb.academico.Amantes_Cafezinho.dtos;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Review;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Unit;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public record ReviewListDTO(
-        @NotBlank
+        @NotNull
         Long id,
-        @NotBlank
+        @NotNull
         Unit unit,
         @NotBlank
         String content,
-        @NotBlank
+        @NotNull
         Integer rating,
-        @NotBlank
+        @NotNull
         LocalDate datetime
 
 ) {

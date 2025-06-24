@@ -43,7 +43,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByReviewer(reviewer);
 
         if (reviews.isEmpty()){
-            throw new ReviewListForReviewerNotFoundException("Não há nenhunma avaliação registrada nesta conta!");
+            throw new ReviewListForReviewerNotFoundException("Não há nenhuma avaliação registrada nesta conta!");
         }
 
         return reviews.stream().map(ReviewListDTO::fromEntity).toList();

@@ -58,7 +58,7 @@ public class FachadaService {
     }
 
     public Review criarAvaliacao(Review review) {
-        return reviewService.criarAvaliacao(review);
+        return reviewService.criarReview(review);
     }
 
     public Reviewer buscarReviewerPorUser(User user) {

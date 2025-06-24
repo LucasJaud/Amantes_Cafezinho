@@ -46,14 +46,14 @@ public class ReviewerController {
 
     @DeleteMapping("/deletarAvaliacao/{id}")
     public ModelAndView deletarAvaliacao(ModelAndView mav, HttpSession session, @PathVariable Long id){
-        reviewService.deletarAvaliacao(id);
+        reviewService.excluirReview(id);
         mav.setViewName("redirect:/avaliador");
         return mav;
     }
 
     @PutMapping("/atualizarAvaliacao/{id}")
     public ModelAndView atualizarAvaliacao(ModelAndView mav, HttpSession session, @PathVariable Long id, @RequestBody Review novaAvaliacao){
-        reviewService.atualizarAvaliacao(id,novaAvaliacao);
+        reviewService.atualizarReview(id,novaAvaliacao);
         mav.setViewName("redirect:/avaliador");
         return mav;
     }

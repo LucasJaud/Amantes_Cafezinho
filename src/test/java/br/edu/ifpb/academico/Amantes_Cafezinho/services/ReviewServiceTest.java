@@ -77,10 +77,10 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("Deve criar uma nova avaliação com sucesso")
-    void criarAvaliacao_ShouldSaveAndReturnReview() {
+    void criarReview_ShouldSaveAndReturnReview() {
         when(reviewRepository.save(any(Review.class))).thenReturn(testReview1);
 
-        Review createdReview = reviewService.criarAvaliacao(testReview1);
+        Review createdReview = reviewService.criarReview(testReview1);
 
         assertNotNull(createdReview);
         assertEquals(testReview1.getId(), createdReview.getId());
@@ -180,11 +180,11 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("Deve deletar uma avaliação existente com sucesso")
-    void deletarAvaliacao_ShouldDeleteExistingReview() {
+    void excluirReview_ShouldDeleteExistingReview() {
         when(reviewRepository.existsById(1L)).thenReturn(true);
         doNothing().when(reviewRepository).deleteById(1L);
 
-        reviewService.deletarAvaliacao(1L);
+        reviewService.excluirReview(1L);
 
         verify(reviewRepository, times(1)).existsById(1L);
         verify(reviewRepository, times(1)).deleteById(1L);
@@ -192,10 +192,10 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("Não deve fazer nada ao tentar deletar uma avaliação inexistente")
-    void deletarAvaliacao_ShouldDoNothingWhenReviewDoesNotExist() {
+    void excluirReview_ShouldDoNothingWhenReviewDoesNotExist() {
         when(reviewRepository.existsById(99L)).thenReturn(false);
 
-        reviewService.deletarAvaliacao(99L);
+        reviewService.excluirReview(99L);
 
         verify(reviewRepository, times(1)).existsById(99L);
         verify(reviewRepository, never()).deleteById(anyLong());
@@ -203,7 +203,7 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("Deve atualizar uma avaliação existente com sucesso e definir a data atual")
-    void atualizarAvaliacao_ShouldUpdateExistingReviewAndSetCurrentDate() {
+    void atualizarReview_ShouldUpdateExistingReviewAndSetCurrentDate() {
         // Dados para a nova avaliação
         Review newReviewData = new Review();
         newReviewData.setRating(3);
@@ -220,7 +220,7 @@ class ReviewServiceTest {
         LocalDate expectedDateAfterUpdate = LocalDate.now();
 
         // Quando o serviço for chamado para atualizar
-        reviewService.atualizarAvaliacao(1L, newReviewData);
+        reviewService.atualizarReview(1L, newReviewData);
 
         // Então, o método findById deve ter sido chamado
         verify(reviewRepository, times(1)).findById(1L);
@@ -240,11 +240,11 @@ class ReviewServiceTest {
 
     @Test
     @DisplayName("Deve lançar ReviewNotFoundException ao tentar atualizar avaliação inexistente")
-    void atualizarAvaliacao_ShouldThrowExceptionWhenNotFound() {
+    void atualizarReview_ShouldThrowExceptionWhenNotFound() {
         when(reviewRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ReviewNotFoundException.class, () ->
-                reviewService.atualizarAvaliacao(99L, new Review()));
+                reviewService.atualizarReview(99L, new Review()));
 
         verify(reviewRepository, times(1)).findById(99L);
         verify(reviewRepository, never()).save(any(Review.class));

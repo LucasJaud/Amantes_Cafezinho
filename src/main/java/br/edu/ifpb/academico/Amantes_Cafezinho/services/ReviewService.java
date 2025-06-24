@@ -23,7 +23,7 @@ public class ReviewService {
     @Autowired
     private StatusRepository statusRepository;
 
-    public Review criarAvaliacao(Review review) {
+    public Review criarReview(Review review) {
         return reviewRepository.save(review);
     }
 
@@ -49,24 +49,18 @@ public class ReviewService {
         return reviews.stream().map(ReviewListDTO::fromEntity).toList();
     }
 
-    public void deletarAvaliacao(Long id){
+    public void excluirReview(Long id){
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
         }
     }
-  
-    public void excluirReview(Long unidade) {
-          reviewRepository.deleteById(unidade);
-      }
 
-    public void atualizarAvaliacao (Long id, Review novaAvaliacao){
+    public void atualizarReview(Long id, Review novaAvaliacao){
         Review original = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Avaliação com ID " + id + " não encontrada!"));
 
         original.update(novaAvaliacao);
         reviewRepository.save(original);
     }
-
-    
 
 }

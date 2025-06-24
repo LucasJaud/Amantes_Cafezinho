@@ -68,4 +68,8 @@ public class FachadaService {
     public Cafeteria buscarCafeteriaPorUser(User user) {
         return cafeteriaService.buscarPorUser(user);
     }
+
+    public void excluirReview(Long unidade) {
+        reviewService.excluirReview(unidade);
+    }
 }

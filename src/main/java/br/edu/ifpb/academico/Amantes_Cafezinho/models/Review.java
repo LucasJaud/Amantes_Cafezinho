@@ -39,6 +39,9 @@ public class Review {
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<Comment> comments;
+  
+    @Column(nullable = true)
+    private Boolean problemSolved = false;
 
     public void update (Review r){
         this.rating = r.getRating();

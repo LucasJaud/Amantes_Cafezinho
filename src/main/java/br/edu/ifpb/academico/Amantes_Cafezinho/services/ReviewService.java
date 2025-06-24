@@ -54,6 +54,10 @@ public class ReviewService {
             reviewRepository.deleteById(id);
         }
     }
+  
+    public void excluirReview(Long unidade) {
+          reviewRepository.deleteById(unidade);
+      }
 
     public void atualizarAvaliacao (Long id, Review novaAvaliacao){
         Review original = reviewRepository.findById(id)
@@ -63,5 +67,6 @@ public class ReviewService {
         reviewRepository.save(original);
     }
 
+    
 
 }

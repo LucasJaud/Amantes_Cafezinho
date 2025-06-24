@@ -119,6 +119,15 @@
                         <p class="text-base" th:text="${avaliacao.content}"></p>
                     </div>
 
+                    <div>
+                        <span th:if="${avaliacao.problemSolved}" class="text-green-600 font-medium">
+                            ✔ Problema resolvido
+                        </span>
+                                    <span th:if="${!avaliacao.problemSolved}" class="text-yellow-600 font-medium">
+                            ✘ Problema não resolvido
+                        </span>
+                    </div>
+
                     <!-- Ícone de comentário com contador -->
                     <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

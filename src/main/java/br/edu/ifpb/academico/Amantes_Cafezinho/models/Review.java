@@ -39,4 +39,7 @@ public class Review {
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<Comment> comments;
+
+    @Column(nullable = true)
+    private Boolean problemSolved = false;
 }

@@ -46,6 +46,15 @@
                    th:errors="*{content}"
                    class="text-sm text-[#B0413E]"></p>
             </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox"
+                       id="problemSolved"
+                       th:field="*{problemSolved}"
+                       class="w-5 h-5 text-[#6B8E23] border-zinc-300 rounded focus:ring-2 focus:ring-[#C98A4B]">
+                <label for="problemSolved" class="text-sm font-medium text-[#4B2E2B]">
+                    Problema resolvido?
+                </label>
+            </div>
             <div class="flex flex-col gap-2">
                 <label class="text-[#4B2E2B] font-semibold">Avaliação:</label>
                 <div class="flex flex-row justify-start star-rating">

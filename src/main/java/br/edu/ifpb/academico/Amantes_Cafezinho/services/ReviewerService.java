@@ -14,4 +14,6 @@ public class ReviewerService {
     private ReviewerRepository reviewerRepository;
 
     public Reviewer buscarPorUser(User user) {return reviewerRepository.findByUser(user).orElse(null);}
+
+
 }

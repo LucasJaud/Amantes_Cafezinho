@@ -10,8 +10,8 @@ import java.time.LocalDate;
 public record ReviewListDTO(
         @NotNull
         Long id,
-        @NotNull
-        Unit unit,
+        @NotBlank
+        String unit,
         @NotBlank
         String content,
         @NotNull
@@ -23,7 +23,7 @@ public record ReviewListDTO(
         public static ReviewListDTO fromEntity(Review review){
             return new ReviewListDTO(
                     review.getId(),
-                    review.getUnit(),
+                    review.getUnit().getName(),
                     review.getContent(),
                     review.getRating(),
                     review.getDatetime()

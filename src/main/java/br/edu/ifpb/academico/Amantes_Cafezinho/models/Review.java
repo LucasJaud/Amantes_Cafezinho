@@ -39,4 +39,10 @@ public class Review {
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<Comment> comments;
+
+    public void update (Review r){
+        this.rating = r.getRating();
+        this.content = r.getContent();
+        this.datetime = LocalDate.now();
+    }
 }

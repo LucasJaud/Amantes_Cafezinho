@@ -72,7 +72,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="reviewItem : ${reviewer.review}" class="hover:bg-gray-50">
-                        <td class="py-3 px-4 border-b" th:text="${reviewItem.unit.name}">Nome da Unidade</td>
+                        <td class="py-3 px-4 border-b" th:text="${reviewItem.unit}">Nome da Unidade</td>
                         <td class="py-3 px-4 border-b" th:text="${reviewItem.rating}">5</td>
                         <td class="py-3 px-4 border-b" th:text="${reviewItem.content}">Conteúdo da Avaliação</td>
                         <td class="py-3 px-4 border-b" th:text="${#temporals.format(reviewItem.datetime, 'dd/MM/yyyy')}">dd/MM/yyyy</td>

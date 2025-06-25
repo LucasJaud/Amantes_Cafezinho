@@ -8,6 +8,7 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.models.*;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.ReviewService;
 import ch.qos.logback.core.model.Model;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -105,7 +106,7 @@ public class FachadaController {
     @PostMapping("/perfilUnidade/{unitId}/criarAvaliacao")
     public ModelAndView criarAvaliacao(
             ModelAndView mav,
-            @Validated @ModelAttribute("Review") Review review,
+            @Valid @ModelAttribute("Review") Review review,
             BindingResult result,
             @PathVariable Long unitId,
             HttpSession session,
@@ -113,8 +114,7 @@ public class FachadaController {
     ) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Erro ao criar avaliação. Verifique os dados.");
-            mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
-
+            mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId + "/criarAvaliacao");
             return mav;
         }
 

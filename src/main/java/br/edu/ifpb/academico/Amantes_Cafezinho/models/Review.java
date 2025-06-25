@@ -1,8 +1,7 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,11 +17,14 @@ public class Review {
     private LocalDate datetime;
 
     @Column(nullable = false, length = 300)
+    @Size(max = 300, message = "O conteúdo não pode ultrapassar 300 caracteres.")
+    @NotBlank(message = "O conteúdo não pode estar em branco.")
     private String content;
 
     @Min(1)
     @Max(5)
     @Column(nullable = false)
+    @NotNull(message = "A avaliação (nota) é obrigatória.")
     private Integer rating;
 
     @ManyToOne

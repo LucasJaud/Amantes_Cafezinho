@@ -41,10 +41,13 @@
                           rows="4"
                           placeholder="Conte como foi sua experiência..."
                           maxlength="300"
+                          oninput="updateCounter()"
+                          required
                           class="border border-zinc-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#C98A4B]"></textarea>
                 <p th:if="${#fields.hasErrors('content')}"
                    th:errors="*{content}"
                    class="text-sm text-[#B0413E]"></p>
+                <p id="counter" class="text-sm text-zinc-500">300 caracteres restantes</p>
             </div>
             <div class="flex items-center gap-2">
                 <input type="checkbox"
@@ -100,7 +103,7 @@
                     Cancelar
                 </a>
                 <button type="submit"
-                        class="bg-[#6B8E23] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#55731b] transition">
+                        class="bg-[#6B8E23] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#55731b] transition cursor-pointer">
                     Enviar Avaliação
                 </button>
             </div>
@@ -109,3 +112,19 @@
 </main>
 </body>
 </html>
+<script>
+    function updateCounter() {
+        const textarea = document.getElementById("content");
+        const counter = document.getElementById("counter");
+        counter.textContent = (300 - textarea.value.length) + " caracteres restantes";
+    }
+    document.getElementById("reviewForm").addEventListener("submit", function(e) {
+        const content = document.getElementById("content").value.trim();
+        const ratingChecked = document.querySelector('input[name="rating"]:checked');
+
+        if (!content || !ratingChecked) {
+            alert("Preencha o conteúdo e escolha uma avaliação.");
+            e.preventDefault();
+        }
+    });
+</script>

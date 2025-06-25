@@ -41,19 +41,10 @@
     </div>
 
     <div class="flex gap-4 mt-6 mb-6">
-        <!-- Botão para Reviewer comentar -->
-        <div th:if="${#authorization.expression('hasRole(''REVIEWER'')')
-                  and #authentication.principal.id == review.reviewer.user.id}">
-            <a th:href="@{/fachada/comentario/novo(reviewId=${review.id})}"
-               class="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-900 text-sm">
-                Comentar
-            </a>
-        </div>
-
         <!-- Botão para Cafeteria responder -->
         <div th:if="${#authorization.expression('hasRole(''CAFETERIA'')')
                   and #authentication.principal.id == review.unit.cafeteria.user.id}">
-            <a th:href="@{/fachada/comentario/resposta(reviewId=${review.id})}"
+            <a th:href="@{/comment/answer(reviewId=${review.id})}"
                class="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-900 text-sm">
                 Responder
             </a>

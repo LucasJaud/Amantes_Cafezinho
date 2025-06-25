@@ -16,16 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/home")
 public class HomeController {
 
     @Autowired
     private CafeteriaRepository cafeteriaRepository;
 
-    @Autowired
-    private ReviewerRepository reviewerRepository;
-
-    @GetMapping
+    @GetMapping("/home")
     public ModelAndView home (ModelAndView mav, HttpSession session){
         User user = (User) session.getAttribute("user");
         if(user != null){
@@ -39,5 +35,10 @@ public class HomeController {
         }
         mav.setViewName("home");
         return mav;
+    }
+
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/home";
     }
 }

@@ -46,6 +46,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         
         // Redireciona para a página inicial
-        response.sendRedirect("/Amantes_Cafezinho/home");
+        response.sendRedirect("/home");
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-@RequestMapping("/avaliador")
+@RequestMapping("/reviewer")
 @PreAuthorize("hasRole('REVIEWER')")
 public class ReviewerController {
 
@@ -44,17 +44,17 @@ public class ReviewerController {
 
     }
 
-    @DeleteMapping("/deletarAvaliacao/{id}")
+    @DeleteMapping("/review/{id}/delete")
     public ModelAndView deletarAvaliacao(ModelAndView mav, HttpSession session, @PathVariable Long id){
         reviewService.excluirReview(id);
-        mav.setViewName("redirect:/avaliador");
+        mav.setViewName("redirect:/reviewer");
         return mav;
     }
 
-    @PutMapping("/atualizarAvaliacao/{id}")
+    @PutMapping("/review/{id}/update")
     public ModelAndView atualizarAvaliacao(ModelAndView mav, HttpSession session, @PathVariable Long id, @RequestBody Review novaAvaliacao){
         reviewService.atualizarReview(id,novaAvaliacao);
-        mav.setViewName("redirect:/avaliador");
+        mav.setViewName("redirect:/reviewer");
         return mav;
     }
 }

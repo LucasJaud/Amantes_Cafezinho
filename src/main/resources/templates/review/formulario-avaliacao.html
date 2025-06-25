@@ -24,7 +24,7 @@
              class="bg-[#B0413E] text-white px-4 py-2 rounded-md text-sm">
             <span th:text="${error}">Ocorreu um erro ao criar a avaliação.</span>
         </div>
-        <form th:action="@{/fachada/perfilUnidade/{unitId}/criarAvaliacao(unitId=${unidadeEscolhida.id})}"
+        <form th:action="@{/unit/{unitId}/profile/review/save(unitId=${unidadeEscolhida.id})}"
               method="POST"
               th:object="${Review}"
               class="flex flex-col gap-6">
@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="flex justify-between gap-4">
-                <a th:href="@{/fachada/perfilUnidade/{id}(id=${unidadeEscolhida.id})}"
+                <a th:href="@{/unit/{id}/profile(id=${unidadeEscolhida.id})}"
                    class="bg-[#B0413E] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#8c3331] transition">
                     Cancelar
                 </a>

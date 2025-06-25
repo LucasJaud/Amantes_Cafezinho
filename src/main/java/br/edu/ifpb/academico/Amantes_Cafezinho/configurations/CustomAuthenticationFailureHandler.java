@@ -29,7 +29,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             errorMessage = "Conta bloqueada. Entre em contato com o suporte!";
         }
 
-        response.sendRedirect("/Amantes_Cafezinho/auth/login?error=" + errorMessage);
+        response.sendRedirect("/auth/login?error=" + errorMessage);
     }
 }
 

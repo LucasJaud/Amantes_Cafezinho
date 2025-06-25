@@ -47,7 +47,7 @@ public class AuthController {
         return mav;
     }
 
-    @PostMapping("/register/cafeteria")
+    @PostMapping("/save/cafeteria")
     public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("cafeteria") Cafeteria cafeteria, BindingResult result){
         if (result.hasErrors()) {
             mav.setViewName("auth/signup-cafeteria");
@@ -58,7 +58,7 @@ public class AuthController {
         return mav;
     }
 
-    @PostMapping("/register/reviewer")
+    @PostMapping("/save/reviewer")
     public ModelAndView register (ModelAndView mav, @Valid @ModelAttribute("reviewer") Reviewer reviewer, BindingResult result){
         if (result.hasErrors()) {
             mav.setViewName("auth/signup-reviewer");

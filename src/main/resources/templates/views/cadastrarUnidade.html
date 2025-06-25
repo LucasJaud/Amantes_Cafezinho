@@ -21,7 +21,7 @@
                 Cadastrar unidade 
             </h2>
             <strong class="mb-5" th:text="'Matriz ' + ${session.cafeteria.fantasyName}"></strong>
-            <form th:action="@{/fachada/criarUnidade}" method="POST"  th:object="${unit}" class="flex flex-col gap-6">
+            <form th:action="@{/unit/save}" method="POST"  th:object="${unit}" class="flex flex-col gap-6">
                 <div class="flex items-center gap-1">
                     <label for="cnpj" class="font-medium">CNPJ</label>
                     <input type="text" th:field="*{cnpj}" id="cnpj" placeholder="00.000.000/0001-00" class="border border-gray-300 text-sm rounded-lg w-full p-2.5">

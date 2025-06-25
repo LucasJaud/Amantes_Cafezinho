@@ -20,7 +20,6 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.services.FachadaService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("fachada")
 public class FachadaController {
 
     @Autowired
@@ -28,7 +27,7 @@ public class FachadaController {
     @Autowired
     private ReviewService reviewService;
 
-    @PostMapping("/criarUnidade")
+    @PostMapping("/unit/save")
     public ModelAndView criarUnidade
                                     (ModelAndView mav,
                                     @Validated @ModelAttribute("unit") Unit unidade,
@@ -55,14 +54,14 @@ public class FachadaController {
         // e redireciona para o perfil da unidade criada
         // ñ está implementado ainda o profile da unidade
         redirectAttributes.addFlashAttribute("success", "Unidade criada com sucesso!");
-        mav.setViewName("redirect:/fachada/perfilUnidade/" + IDdaUnidadeCriada);
+        mav.setViewName("redirect:/unit/" + IDdaUnidadeCriada + "/profile/");
 
         return mav;
         
     }
 
 
-    @GetMapping("/perfilUnidade/{id}")
+    @GetMapping("/unit/{id}/profile")
     public ModelAndView perfilUnidade(ModelAndView mav, @PathVariable Long id) {
         Unit unidade = fachadaService.resgatarUnidadePorId(id);
         List<Review> avaliacoes = unidade.getReviews();
@@ -74,7 +73,7 @@ public class FachadaController {
     }
 
 
-    @GetMapping("/listarUnidades")
+    @GetMapping("/units")
     public ModelAndView listarUnidades(ModelAndView mav, HttpSession session){
         // Resgata a cafeteria logada
         Cafeteria cafeteriaLogada = fachadaService.buscarCafeteriaPorUser((User) session.getAttribute("user"));
@@ -92,7 +91,7 @@ public class FachadaController {
     }
 
 
-    @GetMapping("/cadastrarUnidade")
+    @GetMapping("/unit/form")
     public ModelAndView cadastrUnidade(ModelAndView mav, Unit unidade, HttpSession session) {
 
         Cafeteria cafeteria = (Cafeteria) session.getAttribute("cafeteria");
@@ -103,7 +102,7 @@ public class FachadaController {
         return mav;
     }
 
-    @PostMapping("/perfilUnidade/{unitId}/criarAvaliacao")
+    @PostMapping("/unit/{unitId}/profile/review/save")
     public ModelAndView criarAvaliacao(
             ModelAndView mav,
             @Valid @ModelAttribute("Review") Review review,
@@ -114,7 +113,7 @@ public class FachadaController {
     ) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Erro ao criar avaliação. Verifique os dados.");
-            mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId + "/criarAvaliacao");
+            mav.setViewName("redirect:/unit/" + unitId + "/profile/review/save");
             return mav;
         }
 
@@ -122,7 +121,7 @@ public class FachadaController {
 
         if (unidade == null) {
             redirectAttributes.addFlashAttribute("error", "Unidade não encontrada.");
-            mav.setViewName("redirect:/fachada/listarUnidades");
+            mav.setViewName("redirect:/units");
 
             return mav;
         }
@@ -140,12 +139,12 @@ public class FachadaController {
         review.setStatus(reviewService.buscarPorTipo("ativo").get());
         fachadaService.criarAvaliacao(review);
         redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
-        mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
+        mav.setViewName("redirect:/unit/" + unitId + "/profile/");
 
         return mav;
     }
 
-    @GetMapping("/perfilUnidade/{unitId}/criarAvaliacao")
+    @GetMapping("/unit/{unitId}/profile/review/form")
     public ModelAndView getFormularioAvaliacao(
             ModelAndView mav,
             @PathVariable Long unitId,
@@ -162,7 +161,7 @@ public class FachadaController {
         Unit unidade = fachadaService.resgatarUnidadePorId(unitId);
         if (unidade == null) {
             redirectAttributes.addFlashAttribute("error", "Unidade não encontrada.");
-            mav.setViewName("redirect:/fachada/listarUnidades");
+            mav.setViewName("redirect:/units");
             return mav;
         }
 
@@ -173,7 +172,7 @@ public class FachadaController {
         return mav;
     }
 
-    @PostMapping("/excluirReview")
+    @PostMapping("/review/delete")
     public ModelAndView excluirReview(
             @RequestParam("reviewId") Long reviewId,
             @RequestParam("cafeteriaId") Long cafeteriaId,
@@ -181,7 +180,7 @@ public class FachadaController {
             ) {
 
         fachadaService.excluirReview(reviewId);
-        mav.setViewName("redirect:/fachada/perfilUnidade/" + cafeteriaId);
+        mav.setViewName("redirect:/unit/" + cafeteriaId + "/profile/");
         return mav;
     }
 
@@ -194,14 +193,14 @@ public class FachadaController {
     }
 
     // Resposta da Cafeteria
-    @GetMapping("/comentario/resposta")
+    @GetMapping("/comment/answer")
     public ModelAndView respostaCafeteria(@RequestParam Long reviewId, ModelAndView mav) {
         mav.addObject("reviewId", reviewId);
         mav.setViewName("comments/comment-form");
         return mav;
     }
 
-    @PostMapping("/comentario/salvar")
+    @PostMapping("/comment/save")
     public ModelAndView salvarComentario(
             @RequestParam Long reviewId,
             ModelAndView mav,
@@ -214,7 +213,7 @@ public class FachadaController {
         comentario.setContent(content);
 
         fachadaService.saveComment(review, comentario, usuario);
-        mav.setViewName("redirect:/fachada/review/" + reviewId);
+        mav.setViewName("redirect:/review/" + reviewId);
         return mav;
     }
 

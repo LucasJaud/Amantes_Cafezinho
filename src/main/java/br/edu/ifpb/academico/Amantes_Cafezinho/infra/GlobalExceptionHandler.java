@@ -21,7 +21,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ModelAndView handlerCNPJExistente(CNPJExistente ex) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", ex.getMessage());
-        mav.setViewName("redirect:/fachada/cadastrarUnidade");
+        mav.setViewName("redirect:/unit/form");
         return mav;
     }
 
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ModelAndView handlerReviewListNotFound(ReviewListForReviewerNotFoundException ex){
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", ex.getMessage());
-        mav.setViewName("redirect:/avaliador");
+        mav.setViewName("redirect:/reviewer");
         return mav;
     }
 

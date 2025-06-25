@@ -2,9 +2,11 @@ package br.edu.ifpb.academico.Amantes_Cafezinho.configurations;
 
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Admin;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Role;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Status;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.User;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.AdminRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.RoleRepository;
+import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.StatusRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private StatusRepository statusRepository;
 
     @Override
     public void run(String... args) {
@@ -36,6 +40,8 @@ public class DataInitializer implements CommandLineRunner {
         createRoleIfNotExists("REVIEWER");
         createRoleIfNotExists("CAFETERIA");
         createAdminIfNotExists();
+        createStatusIfNotExists("ativo");
+        createStatusIfNotExists("desativo");
     }
 
     private void createRoleIfNotExists(String roleName) {
@@ -67,6 +73,14 @@ public class DataInitializer implements CommandLineRunner {
             admin.setUser(user);
             admin.setPermissionApproval(true);
             adminRepository.save(admin);
+        }
+    }
+
+    public void createStatusIfNotExists(String status) {
+        if (statusRepository.findByType(status).isEmpty()){
+            Status newStatus = new Status();
+            newStatus.setType(status);
+            statusRepository.save(newStatus);
         }
     }
 }

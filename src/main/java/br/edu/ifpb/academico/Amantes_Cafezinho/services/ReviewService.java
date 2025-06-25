@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -39,6 +40,7 @@ public class ReviewService {
         return reviewRepository.findByUnit(unidade);
     }
 
+
     public List<ReviewListDTO> listarPorAvaliador (Reviewer reviewer){
         List<Review> reviews = reviewRepository.findByReviewer(reviewer);
 
@@ -53,6 +55,9 @@ public class ReviewService {
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
         }
+      
+    public Optional<Status> buscarPorTipo(String tipo) {
+        return statusRepository.findByType(tipo);
     }
 
     public void atualizarReview(Long id, Review novaAvaliacao){

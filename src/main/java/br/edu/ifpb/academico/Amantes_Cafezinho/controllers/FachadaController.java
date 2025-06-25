@@ -137,7 +137,7 @@ public class FachadaController {
         review.setUnit(unidade);
         review.setReviewer(loggedReviewer);
         review.setDatetime(LocalDate.now());
-        review.setStatus(reviewService.buscarPorTipo("ativo"));
+        review.setStatus(reviewService.buscarPorTipo("ativo").get());
         fachadaService.criarAvaliacao(review);
         redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
         mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);
@@ -182,6 +182,39 @@ public class FachadaController {
 
         fachadaService.excluirReview(reviewId);
         mav.setViewName("redirect:/fachada/perfilUnidade/" + cafeteriaId);
+        return mav;
+    }
+
+    @GetMapping("/review/{id}")
+    public ModelAndView detalhesAvaliacao(@PathVariable Long id,ModelAndView mav ) {
+        Review review = reviewService.buscarPorId(id);
+        mav.addObject("review", review);
+        mav.setViewName("review/detalhes-avaliacao");
+        return mav;
+    }
+
+    // Resposta da Cafeteria
+    @GetMapping("/comentario/resposta")
+    public ModelAndView respostaCafeteria(@RequestParam Long reviewId, ModelAndView mav) {
+        mav.addObject("reviewId", reviewId);
+        mav.setViewName("comments/comment-form");
+        return mav;
+    }
+
+    @PostMapping("/comentario/salvar")
+    public ModelAndView salvarComentario(
+            @RequestParam Long reviewId,
+            ModelAndView mav,
+            @RequestParam String content,
+            HttpSession session) {
+
+        Review review = reviewService.buscarPorId(reviewId);
+        User usuario = (User) session.getAttribute("user");
+        Comment comentario = new Comment();
+        comentario.setContent(content);
+
+        fachadaService.saveComment(review, comentario, usuario);
+        mav.setViewName("redirect:/fachada/review/" + reviewId);
         return mav;
     }
 

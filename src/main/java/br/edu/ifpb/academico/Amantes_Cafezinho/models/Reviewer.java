@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
-    @Entity
+@Entity
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -20,7 +20,6 @@ import org.hibernate.validator.constraints.br.CPF;
         @JoinColumn(name = "user_id", nullable = false, unique = true)
         private User user;
 
-        @CPF
         private String CPF;
 
         private String sex;

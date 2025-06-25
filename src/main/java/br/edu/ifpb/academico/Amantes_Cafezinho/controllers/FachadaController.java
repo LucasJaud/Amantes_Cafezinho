@@ -137,7 +137,7 @@ public class FachadaController {
         review.setUnit(unidade);
         review.setReviewer(loggedReviewer);
         review.setDatetime(LocalDate.now());
-        review.setStatus(reviewService.buscarPorTipo("ativo"));
+        review.setStatus(reviewService.buscarPorTipo("ativo").get());
         fachadaService.criarAvaliacao(review);
         redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
         mav.setViewName("redirect:/fachada/perfilUnidade/" + unitId);

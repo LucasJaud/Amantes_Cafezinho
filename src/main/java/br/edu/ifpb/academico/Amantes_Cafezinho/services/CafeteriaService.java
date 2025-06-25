@@ -62,4 +62,12 @@ public class CafeteriaService {
     }
 
     public Cafeteria buscarPorUser(User user) {return cafeteriaRepository.findByUser(user).orElse(null);}
+
+    public List<Cafeteria> listarCafeterias() {
+        return cafeteriaRepository.findAll();
+    }
+
+    public List<Cafeteria> listarCafeteriasPorNome(String fantasyName) {
+        return cafeteriaRepository.findByFantasyNameContainingIgnoreCase(fantasyName);
+    }
 }

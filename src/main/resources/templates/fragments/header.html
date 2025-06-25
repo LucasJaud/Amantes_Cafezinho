@@ -32,6 +32,11 @@
                             Logout
                         </a>
                     </li>
+                    <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200" sec:authorize="hasRole('REVIEWER')">
+                        <a th:href="@{/cafeteria/listarCafeterias}" class="flex items-center">
+                            Lista de Cafeterias
+                        </a>
+                    </li>
                 </ul>
             </div>
             <button

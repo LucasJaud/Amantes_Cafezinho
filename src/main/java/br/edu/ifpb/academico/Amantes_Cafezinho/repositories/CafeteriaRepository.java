@@ -13,4 +13,6 @@ public interface CafeteriaRepository  extends JpaRepository<Cafeteria, Long> {
      Optional<Cafeteria> findByUser(User user);
 
      Optional<Cafeteria> findByCNPJ(String cnpj);
+
+     List<Cafeteria> findByFantasyNameContainingIgnoreCase(String fantasyName);
 }

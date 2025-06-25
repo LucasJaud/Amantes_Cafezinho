@@ -51,7 +51,15 @@
             <div th:each="unit : ${cafeteria.units}" class="p-6 hover:bg-gray-50 transition-colors">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h3 class="text-lg font-medium text-gray-800" th:text="${unit.name}"></h3>
+                        <h3 class="text-lg font-medium text-gray-800">
+                            <span th:text="${unit.name}">Nome da Unidade</span>
+                            <span th:if="${unit.average != null and unit.average != 0.0}" class="ml-2 text-base text-amber-600 font-bold">
+                                ⭐ <span th:text="${#numbers.formatDecimal(unit.average, 1, 1)}">4.5</span>
+                            </span>
+                            <span th:unless="${unit.average != null and unit.average != 0.0}" class="ml-2 text-sm text-gray-500">
+                                (Sem avaliações)
+                            </span>
+                        </h3>
                         <p class="text-gray-600 mt-1" th:text="${unit.cnpj}"></p>
                     </div>
                     <a th:href="@{/unit/{unitId}/profile(unitId=${unit.id})}"

@@ -54,6 +54,16 @@
                         <h3 class="text-lg font-medium text-gray-800" th:text="${unit.name}"></h3>
                         <p class="text-gray-600 mt-1" th:text="${unit.cnpj}"></p>
                     </div>
+
+                    <div class="flex items-center text-[#4B2E2B] font-medium">
+                        <span th:if="${unit.average != null and unit.average != 0.0}">
+                            ⭐ <span th:text="${#numbers.formatDecimal(unit.average, 1, 1)}">4.5</span>
+                        </span>
+                        <span th:unless="${unit.average != null and unit.average != 0.0}" class="text-sm text-gray-500">
+                            Sem avaliações
+                        </span>
+                    </div>
+
                     <a th:href="@{/fachada/perfilUnidade/{unitId}(unitId=${unit.id})}"
                        class="text-amber-600 hover:text-amber-800 font-medium">
                         Ver detalhes →

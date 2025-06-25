@@ -1,5 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 //import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,9 @@ public class Unit {
 
     @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;
+
+    @NotNull
+    private Double average = 0.0;
 
     @Override
     public String toString() {

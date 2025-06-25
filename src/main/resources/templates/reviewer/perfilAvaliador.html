@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt_BR"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Amantes do Cafezinho | Perfil do Avaliador</title>
+</head>
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-[#4B2E2B]">Meu Perfil de Avaliador</h1>
+
+    <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <strong class="font-bold">Erro!</strong>
+        <span class="block sm:inline" th:text="${error}">Mensagem de erro.</span>
+    </div>
+
+    <div th:if="${reviewer}" class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="bg-amber-800 h-32"></div>
+        <div class="px-6 py-4">
+            <div class="flex items-center">
+                <div class="mr-4">
+                    <div class="w-24 h-24 rounded-full bg-amber-200 border-4 border-white -mt-12 flex items-center justify-center text-amber-800 text-2xl font-bold">
+                        <span th:text="${reviewer.fullName != null and #strings.contains(reviewer.fullName, ' ') ? (#strings.substring(reviewer.fullName, 0, 1) + #strings.substring(reviewer.fullName, #strings.indexOf(reviewer.fullName, ' ') + 1, #strings.indexOf(reviewer.fullName, ' ') + 2)) : (#strings.substring(reviewer.fullName, 0, 1) ?: '?')}">AB</span>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-[#4B2E2B]" th:text="${reviewer.fullName}">Nome Completo do Avaliador</h1>
+                    <p class="text-[#4B2E2B]" th:text="${reviewer.user.email}">email@example.com</p>
+                </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4">
+                <div class="bg-amber-100 px-4 py-2 rounded-lg">
+                    <span class="block text-xs text-amber-800">Nome de Usuário</span>
+                    <span class="font-medium" th:text="${reviewer.user.username}">nome_usuario</span>
+                </div>
+                <div class="bg-amber-100 px-4 py-2 rounded-lg">
+                    <span class="block text-xs text-amber-800">CPF</span>
+                    <span class="font-medium" th:text="${reviewer.CPF}">000.000.000-00</span>
+                </div>
+                <div class="bg-amber-100 px-4 py-2 rounded-lg">
+                    <span class="block text-xs text-amber-800">Sexo</span>
+                    <span class="font-medium" th:text="${reviewer.sex == 'M' ? 'Masculino' : (reviewer.sex == 'F' ? 'Feminino' : 'Não Informado')}">Gênero</span>
+                </div>
+                <div class="bg-amber-100 px-4 py-2 rounded-lg">
+                    <span class="block text-xs text-amber-800">Nascimento</span>
+                    <span class="font-medium" th:text="${#temporals.format(reviewer.birthDate, 'dd/MM/yyyy')}">dd/MM/yyyy</span>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${reviewer}" class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">Nenhum perfil de avaliador encontrado para sua conta. Por favor, complete seu cadastro.</span>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-semibold text-[#4B2E2B] mb-4">Minhas Avaliações</h2>
+
+            <div th:if="${#lists.isEmpty(reviews) and !error}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">Você ainda não possui avaliações registradas.</span>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(reviews)}" class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 rounded-md">
+                    <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-2 px-4 border-b text-left text-gray-600 font-semibold">Cafeteria/Unidade</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-600 font-semibold">Avaliação (1-5)</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-600 font-semibold">Conteúdo</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-600 font-semibold">Data</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-600 font-semibold">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reviewItem : ${reviews}" class="hover:bg-gray-50">
+                        <td class="py-3 px-4 border-b" th:text="${reviewItem.unitName}">Nome da Unidade</td>
+                        <td class="py-3 px-4 border-b" th:text="${reviewItem.rating}">5</td>
+                        <td class="py-3 px-4 border-b" th:text="${reviewItem.content}">Conteúdo da Avaliação</td>
+                        <td class="py-3 px-4 border-b" th:text="${#temporals.format(reviewItem.datetime, 'dd/MM/yyyy')}">dd/MM/yyyy</td>
+                        <td class="py-3 px-4 border-b">
+                            <button th:data-id="${reviewItem.id}"
+                                    th:data-rating="${reviewItem.rating}"
+                                    th:data-content="${reviewItem.content}"
+                                    onclick="openEditModal(this)"
+                                    class="bg-[#C98A4B] hover:bg-amber-700 text-white font-bold py-1 px-3 rounded text-xs mr-2">Editar</button>
+
+                            <form th:action="@{/avaliador/deletarAvaliacao/{id}(id=${reviewItem.id})}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta avaliação?');">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs">Deletar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="editReviewModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <h3 class="text-lg font-bold mb-4 text-[#4B2E2B]">Editar Avaliação</h3>
+            <form id="editReviewForm" th:action="@{/avaliador/atualizarAvaliacao}" method="post">
+                <input type="hidden" name="_method" value="put" />
+                <input type="hidden" id="editReviewId" name="id" />
+
+                <div class="mb-4">
+                    <label for="editRating" class="block text-[#4B2E2B] text-sm font-bold mb-2">Avaliação (1-5):</label>
+                    <input type="number" id="editRating" name="rating" min="1" max="5" required
+                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-4">
+                    <label for="editContent" class="block text-[#4B2E2B] text-sm font-bold mb-2">Conteúdo:</label>
+                    <textarea id="editContent" name="content" rows="4" required
+                              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-[#C98A4B] hover:bg-amber-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Salvar Alterações</button>
+                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function openEditModal(button) {
+            const id = button.getAttribute('data-id');
+            const rating = button.getAttribute('data-rating');
+            const content = button.getAttribute('data-content');
+
+            document.getElementById('editReviewId').value = id;
+            document.getElementById('editRating').value = rating;
+            document.getElementById('editContent').value = content;
+
+            // Atualiza a action do formulário para incluir o ID dinamicamente
+            const form = document.getElementById('editReviewForm');
+            form.action = /*[[@{/avaliador/atualizarAvaliacao/}]]*/ + id;
+
+            document.getElementById('editReviewModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editReviewModal').classList.add('hidden');
+        }
+
+        /* Handler para o envio do formulário de PUT usando fetch API */
+        document.getElementById('editReviewForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const form = event.target;
+            const reviewId = document.getElementById('editReviewId').value;
+            const rating = document.getElementById('editRating').value;
+            const content = document.getElementById('editContent').value;
+
+            const reviewData = {
+                rating: parseInt(rating),
+                content: content
+            };
+
+            fetch(form.action, { // A action do formulário já tem o ID
+                method: 'PUT', // Define o método HTTP para PUT
+                headers: {
+                    'Content-Type': 'application/json' // Importante para o @RequestBody no Spring
+                },
+                body: JSON.stringify(reviewData) // Envia os dados como JSON
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Segue o redirecionamento
+                } else if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar avaliação:', error);
+                alert('Erro ao atualizar avaliação: ' + error.message);
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>

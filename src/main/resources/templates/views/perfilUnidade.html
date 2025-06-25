@@ -72,7 +72,7 @@
                    onmouseout="this.style.backgroundColor='#C98A4B'">
                     Voltar
                 </a>
-                <a th:href="@{/fachada/perfilUnidade/{id}/criarAvaliacao(id=${unidadeEscolhida.id})}"
+                <a th:href="@{/unit/{id}/profile/review/form(id=${unidadeEscolhida.id})}"
                    sec:authorize="hasRole('REVIEWER')"
                    class="flex-1 text-white px-6 py-2 rounded-lg font-medium transition text-center"
                    style="background-color: #C98A4B;"
@@ -146,7 +146,7 @@
                         <span th:text="${avaliacao.comments.size()}"></span>
                     </div>
                     <div sec:authorize="hasRole('REVIEWER')" th:if="${#authentication.principal.id == avaliacao.reviewer.id}">
-                            <form  th:action="@{/fachada/excluirReview}" method="post">
+                            <form  th:action="@{/review/delete}" method="post">
                                 <input type="hidden" name="reviewId" th:value="${avaliacao.id}"/>
                                 <input type="hidden" name="cafeteriaId" th:value="${unidadeEscolhida.id}"/>
                                 <button type="submit" class="text-red-500">Remover avaliação</button>
@@ -155,7 +155,7 @@
 
                     <!-- Botão “Ver detalhes” -->
                     <div class="mt-2">
-                        <a th:href="@{/fachada/review/{id}(id=${avaliacao.id})}"
+                        <a th:href="@{/review/{id}(id=${avaliacao.id})}"
                            class="inline-flex items-center gap-1 bg-[#4B2E2B] text-white text-sm font-medium px-3 py-1 rounded hover:bg-[#5c3a36]">
                             <!-- Ícone opcional -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"

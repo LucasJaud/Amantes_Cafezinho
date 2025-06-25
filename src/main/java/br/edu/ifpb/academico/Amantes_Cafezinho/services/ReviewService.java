@@ -32,7 +32,7 @@ public class ReviewService {
         return reviewRepository.findById(id).orElse(null);
     }
 
-    public Status buscarPorTipo(String tipo) {
+    public Optional<Status> buscarPorTipo(String tipo) {
         return statusRepository.findByType(tipo);
     }
 
@@ -44,20 +44,13 @@ public class ReviewService {
     public List<ReviewListDTO> listarPorAvaliador (Reviewer reviewer){
         List<Review> reviews = reviewRepository.findByReviewer(reviewer);
 
-        if (reviews.isEmpty()){
-            throw new ReviewListForReviewerNotFoundException("Não há nenhuma avaliação registrada nesta conta!");
-        }
-
         return reviews.stream().map(ReviewListDTO::fromEntity).toList();
     }
 
-    public void excluirReview(Long id){
+    public void excluirReview(Long id) {
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
         }
-      
-    public Optional<Status> buscarPorTipo(String tipo) {
-        return statusRepository.findByType(tipo);
     }
 
     public void atualizarReview(Long id, Review novaAvaliacao){

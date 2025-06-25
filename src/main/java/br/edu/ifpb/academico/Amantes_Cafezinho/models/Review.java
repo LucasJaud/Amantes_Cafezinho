@@ -25,7 +25,7 @@ public class Review {
     @Max(5)
     @Column(nullable = false)
     @NotNull(message = "A avaliação (nota) é obrigatória.")
-    private Integer rating;
+    private     Integer rating;
 
     @ManyToOne
     @JoinColumn(name = "reviewer_id",nullable = false)

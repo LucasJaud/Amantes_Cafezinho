@@ -55,7 +55,7 @@
         <div class="bg-white shadow-lg rounded-lg p-6 mt-8">
             <h2 class="text-2xl font-semibold text-[#4B2E2B] mb-4">Minhas Avaliações</h2>
 
-            <div th:if="${#lists.isEmpty(reviews) and !error}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div th:if="${#lists.isEmpty(reviews) and error != true}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">Você ainda não possui avaliações registradas.</span>
             </div>
 
@@ -83,7 +83,7 @@
                                     onclick="openEditModal(this)"
                                     class="bg-[#C98A4B] hover:bg-amber-700 text-white font-bold py-1 px-3 rounded text-xs mr-2">Editar</button>
 
-                            <form th:action="@{/avaliador/deletarAvaliacao/{id}(id=${reviewItem.id})}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta avaliação?');">
+                            <form th:action="@{/reviewer/review/{id}/delete(id=${reviewItem.id})}" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja deletar esta avaliação?');">
                                 <input type="hidden" name="_method" value="delete" />
                                 <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs">Deletar</button>
                             </form>
@@ -98,7 +98,7 @@
     <div id="editReviewModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <h3 class="text-lg font-bold mb-4 text-[#4B2E2B]">Editar Avaliação</h3>
-            <form id="editReviewForm" th:action="@{/avaliador/atualizarAvaliacao}" method="post">
+            <form id="editReviewForm" th:action="@{/reviewer/review/update}" method="post">
                 <input type="hidden" name="_method" value="put" />
                 <input type="hidden" id="editReviewId" name="id" />
 
@@ -133,7 +133,7 @@
 
             // Atualiza a action do formulário para incluir o ID dinamicamente
             const form = document.getElementById('editReviewForm');
-            form.action = /*[[@{/avaliador/atualizarAvaliacao/}]]*/ + id;
+            form.action = /*[[@{/reviewer/review/}]]*/ + id + "/delete";
 
             document.getElementById('editReviewModal').classList.remove('hidden');
         }

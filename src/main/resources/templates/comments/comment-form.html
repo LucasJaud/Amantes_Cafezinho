@@ -7,7 +7,7 @@
 <div class="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6">
     <h2 class="text-xl font-bold mb-4">Adicionar Comentário</h2>
 
-    <form th:action="@{/fachada/comentario/salvar}" method="post" class="space-y-4">
+    <form th:action="@{/comment/save}" method="post" class="space-y-4">
         <!-- ID da Review (oculto) -->
         <input type="hidden" name="reviewId" th:value="${reviewId}" />
 
@@ -21,7 +21,7 @@
 
         <!-- Botões -->
         <div class="flex justify-between items-center">
-            <a th:href="@{/fachada/review/{id}(id=${reviewId})}"
+            <a th:href="@{/review/{id}(id=${reviewId})}"
                class="text-sm text-[#4B2E2B] underline hover:text-[#6b4a47]">← Voltar</a>
 
             <button type="submit"

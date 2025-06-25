@@ -146,6 +146,22 @@
                                 <button type="submit" class="text-red-500">Remover avaliação</button>
                             </form>
                     </div>
+
+                    <!-- Botão “Ver detalhes” -->
+                    <div class="mt-2">
+                        <a th:href="@{/fachada/review/{id}(id=${avaliacao.id})}"
+                           class="inline-flex items-center gap-1 bg-[#4B2E2B] text-white text-sm font-medium px-3 py-1 rounded hover:bg-[#5c3a36]">
+                            <!-- Ícone opcional -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 12H9"></path>
+                                <path d="M12 15l-3-3 3-3"></path>
+                                <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"></path>
+                            </svg>
+                            Ver detalhes
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

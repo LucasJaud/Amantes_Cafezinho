@@ -8,31 +8,31 @@ import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class Reviewer{
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Reviewer{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-        @JoinColumn(name = "user_id", nullable = false, unique = true)
-        private User user;
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 
-        private String CPF;
+    private String CPF;
 
-        private String sex;
+    private String sex;
 
-        private String fullName;
+    private String fullName;
 
-        private LocalDate birthDate;
+    private LocalDate birthDate;
 
-        @OneToMany(mappedBy = "reviewer", fetch = FetchType.EAGER)
-        private List<Review> review;
+    @OneToMany(mappedBy = "reviewer", fetch = FetchType.EAGER)
+    private List<Review> review;
 
-        @Override
-        public String toString() {
-            return fullName != null ? fullName : "No name";
-        }
+    @Override
+    public String toString() {
+        return fullName != null ? fullName : "No name";
     }
+}

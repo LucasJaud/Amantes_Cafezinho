@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Avaliação</title>
+</head>
+<body class="bg-[#f5f3f0] text-[#4B2E2B] p-6">
+<div class="max-w-3xl mx-auto bg-[#F5EBDD] text-[#4B2E2B] shadow-md rounded-lg p-6">
+
+    <!-- Título -->
+    <h2 class="text-2xl font-bold mb-4">Detalhes da Avaliação</h2>
+
+    <!-- Bloco da review -->
+    <div class="border border-[#4B2E2B] rounded-lg p-4 mb-6 bg-[#f8f6f5]">
+        <div class="flex justify-between items-center mb-2">
+            <strong class="text-lg" th:text="${review.reviewer.fullName}">Nome do Usuário</strong>
+            <span class="text-sm text-[#A89F91]" th:text="${#temporals.format(review.datetime, 'dd/MM/yyyy')}">
+                    25/06/2025
+                </span>
+        </div>
+
+        <!-- Nota -->
+        <div class="flex items-center gap-1 mb-2">
+            <span class="text-sm font-semibold">Nota:</span>
+            <div class="flex">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                          th:text="'★'"
+                          th:classappend="${i <= review.rating} ? 'text-[#C98A4B]' : 'text-[#F5EBDD]'"
+                          class="text-xl">
+                    </span>
+            </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <p class="mb-2" th:text="${review.content}">Comentário do usuário...</p>
+
+        <!-- Problema resolvido -->
+        <div>
+            <span th:if="${review.problemSolved}" class="text-green-600 font-medium">✔ Problema resolvido</span>
+            <span th:if="${!review.problemSolved}" class="text-yellow-600 font-medium">✘ Problema não resolvido</span>
+        </div>
+    </div>
+
+    <div class="flex gap-4 mt-6 mb-6">
+        <!-- Botão para Reviewer comentar -->
+        <div th:if="${#authorization.expression('hasRole(''REVIEWER'')')
+                  and #authentication.principal.id == review.reviewer.user.id}">
+            <a th:href="@{/fachada/comentario/novo(reviewId=${review.id})}"
+               class="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-900 text-sm">
+                Comentar
+            </a>
+        </div>
+
+        <!-- Botão para Cafeteria responder -->
+        <div th:if="${#authorization.expression('hasRole(''CAFETERIA'')')
+                  and #authentication.principal.id == review.unit.cafeteria.user.id}">
+            <a th:href="@{/fachada/comentario/resposta(reviewId=${review.id})}"
+               class="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-900 text-sm">
+                Responder
+            </a>
+        </div>
+    </div>
+
+    <!-- Comentários -->
+    <h3 class="text-xl font-semibold mb-3">Comentários</h3>
+    <div th:if="${review.comments.size() == 0}" class="text-[#A89F91] mb-4">
+        Nenhum comentário ainda.
+    </div>
+
+    <ul th:each="comment : ${review.comments}" class="space-y-4">
+        <li class="bg-[#fdfcfc] border-l-4 border-[#C98A4B] pl-4 py-2 shadow-sm rounded">
+            <div class="text-sm mb-1">
+                <div th:if="${comment.user.id == review.unit.cafeteria.user.id}">
+                    <strong th:text="${review.unit.cafeteria.fantasyName}">Usuário</strong>
+                </div>
+                <div th:if="${comment.user.id != review.unit.cafeteria.user.id}">
+                    <strong th:text="${comment.user.username}">Usuário</strong>
+                </div>
+            </div>
+            <p class="text-base" th:text="${comment.content}">Conteúdo do comentário</p>
+        </li>
+    </ul>
+
+    <!-- Botão Voltar -->
+    <div class="mt-6">
+        <a th:href="@{/cafeteria/{id}(id=${review.unit.id})}"
+           class="inline-block bg-[#4B2E2B] text-white px-4 py-2 rounded hover:bg-[#5c3a36] text-sm">
+            ← Voltar para unidade
+        </a>
+    </div>
+</div>
+</body>
+</html>

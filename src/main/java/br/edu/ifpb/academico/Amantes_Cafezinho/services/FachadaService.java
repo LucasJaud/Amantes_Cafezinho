@@ -3,6 +3,7 @@ package br.edu.ifpb.academico.Amantes_Cafezinho.services;
 import java.util.List;
 
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.*;
+import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.ReviewerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class FachadaService {
 
     @Autowired
     private ReviewerService reviewerService;
+
+    @Autowired
+    private CommentService commentService;
 
 
     public Unit criarUnidade(Unit unidade) {
@@ -71,5 +75,13 @@ public class FachadaService {
 
     public void excluirReview(Long unidade) {
         reviewService.excluirReview(unidade);
+    }
+
+    public void saveComment(Review review,Comment comentario, User user) {
+        comentario.setReview(review);
+        comentario.setUser(user);
+        commentService.saveComment(comentario);
+//        review.getComments().add(comentario);
+//        reviewService.criarAvaliacao(review);
     }
 }

@@ -26,7 +26,7 @@ public class Review {
     private Integer rating;
 
     @ManyToOne
-    @JoinColumn(name = "cafeteria_id",nullable = false)
+    @JoinColumn(name = "reviewer_id",nullable = false)
     private Reviewer reviewer;
 
     @ManyToOne

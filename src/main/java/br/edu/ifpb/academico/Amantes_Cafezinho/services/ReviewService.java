@@ -12,6 +12,7 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.StatusRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,35 +29,41 @@ public class ReviewService {
     @Autowired
     private UnitRepository unitRepository;
 
+    // Método auxiliar para recalcular e atualizar a média de uma unidade
+    private void updateUnitAverageRating(Unit unit) {
+        if (unit != null && unit.getId() != null) {
+            Double avg = unitRepository.findAverageRatingByUnitId(unit.getId());
+            unit.setAverage(avg != null ? avg : 0.0);
+            unitRepository.save(unit);
+        }
+    }
+
+    @Transactional
     public Review criarReview(Review review) {
         Review reviewGerada = reviewRepository.save(review);
-        Unit unidade = reviewGerada.getUnit();
-        unidade.setAverage(unitRepository.findAverageRatingByUnitId(unidade.getId()));
-        unitRepository.save(unidade);
-
+        updateUnitAverageRating(reviewGerada.getUnit());
         return reviewGerada;
     }
 
-    public void excluirReview(Long id){
-        if (reviewRepository.existsById(id)) {
-            Review reviewDeletada = this.buscarPorId(id);
-            reviewRepository.deleteById(id);
-            Unit unidade = reviewDeletada.getUnit();
-            unidade.setAverage(unitRepository.findAverageRatingByUnitId(unidade.getId()));
-            unitRepository.save(unidade);
-        }
+    @Transactional
+    public void excluirReview(Long id) {
+        Optional<Review> reviewOptional = reviewRepository.findById(id);
 
+        if (reviewOptional.isPresent()) {
+            Review reviewDeletada = reviewOptional.get();
+            reviewRepository.deleteById(id);
+            updateUnitAverageRating(reviewDeletada.getUnit());
+        }
     }
 
+    @Transactional
     public Review atualizarReview(Long id, Review novaAvaliacao){
         Review original = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Avaliação com ID " + id + " não encontrada!"));
 
         original.update(novaAvaliacao);
         Review reviewAtualizada = reviewRepository.save(original);
-        Unit unidade = reviewAtualizada.getUnit();
-        unidade.setAverage(unitRepository.findAverageRatingByUnitId(unidade.getId()));
-        unitRepository.save(unidade);
+        updateUnitAverageRating(reviewAtualizada.getUnit());
 
         return reviewAtualizada;
     }

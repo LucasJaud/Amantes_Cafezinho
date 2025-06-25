@@ -41,7 +41,7 @@ public class Unit {
     private String priceCategory;
 
     @Column(nullable = false)
-    private Double average;
+    private Double average = 0.0;
 
     @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;

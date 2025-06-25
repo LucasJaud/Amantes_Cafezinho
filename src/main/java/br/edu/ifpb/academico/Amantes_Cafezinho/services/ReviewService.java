@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -31,7 +32,7 @@ public class ReviewService {
         return reviewRepository.findByUnit(unidade);
     }
 
-    public Status buscarPorTipo(String tipo) {
+    public Optional<Status> buscarPorTipo(String tipo) {
         return statusRepository.findByType(tipo);
     }
 

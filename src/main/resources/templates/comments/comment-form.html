@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+    <title>Amantes do Cafezinho | Avaliação</title>
+</head>
+<body class="bg-[#f5f3f0] text-[#4B2E2B] p-6">
+<div class="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-bold mb-4">Adicionar Comentário</h2>
+
+    <form th:action="@{/fachada/comentario/salvar}" method="post" class="space-y-4">
+        <!-- ID da Review (oculto) -->
+        <input type="hidden" name="reviewId" th:value="${reviewId}" />
+
+        <!-- Campo de texto -->
+        <div>
+            <label for="content" class="block text-sm font-medium mb-1">Comentário:</label>
+            <textarea th:name="content" id="content" rows="4"
+                      class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#C98A4B]"
+                      placeholder="Digite seu comentário aqui..." required></textarea>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-between items-center">
+            <a th:href="@{/fachada/review/{id}(id=${reviewId})}"
+               class="text-sm text-[#4B2E2B] underline hover:text-[#6b4a47]">← Voltar</a>
+
+            <button type="submit"
+                    class="bg-[#4B2E2B] text-white px-4 py-2 rounded hover:bg-[#5c3a36] text-sm">
+                Enviar Comentário
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -52,7 +52,7 @@ public class ReviewService {
         if (reviewOptional.isPresent()) {
             Review reviewDeletada = reviewOptional.get();
             reviewRepository.deleteById(id);
-            updateUnitAverageRating(reviewDeletada.getUnit());
+            //updateUnitAverageRating(reviewDeletada.getUnit());
         }
     }
 

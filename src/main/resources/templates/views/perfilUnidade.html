@@ -136,49 +136,61 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg my-1 mr-2" viewBox="0 0 16 16">
                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                             </svg>
-                            Problema nâo resolvido
+                            Problema não resolvido
                         </div>
                     </div>
-
-                    <!-- Ícone de comentário com contador -->
-                    <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M2.25 12.75c0 .621.504 1.125 1.125 1.125h.75v3.375L7.5 13.875h9.375c.621 0 1.125-.504
-                          1.125-1.125v-7.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125
-                          1.125v7.5z"/>
-                        </svg>
-                        <span th:text="${avaliacao.comments.size()}"></span>
-                    </div>
-                    <div sec:authorize="hasRole('REVIEWER')" th:if="${#authentication.principal.id == avaliacao.reviewer.id}">
-                            <form  th:action="@{/review/delete}" method="post">
-                                <input type="hidden" name="reviewId" th:value="${avaliacao.id}"/>
-                                <input type="hidden" name="cafeteriaId" th:value="${unidadeEscolhida.id}"/>
-                                <button type="submit" class="text-red-500">Remover avaliação</button>
-                            </form>
-                    </div>
-
-                    <!-- Botão “Ver detalhes” -->
-                    <div class="mt-2">
-                        <a th:href="@{/review/{id}(id=${avaliacao.id})}"
-                           class="inline-flex items-center gap-1 bg-[#4B2E2B] text-white text-sm font-medium px-3 py-1 rounded hover:bg-[#5c3a36]">
-                            <!-- Ícone opcional -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M15 12H9"></path>
-                                <path d="M12 15l-3-3 3-3"></path>
-                                <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"></path>
+                    <div class="flex justify-between items-center mt-2">
+                        <!-- Ícone de comentários à esquerda -->
+                        <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M2.25 12.75c0 .621.504 1.125 1.125 1.125h.75v3.375L7.5 13.875h9.375c.621 0 1.125-.504
+      1.125-1.125v-7.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125
+      1.125v7.5z"/>
                             </svg>
-                            Ver detalhes
-                        </a>
-                    </div>
+                            <span th:text="${avaliacao.comments.size()}"></span>
+                        </div>
 
+                        <!-- Botões à direita: Ver detalhes + Remover avaliação (condicional) -->
+                        <div class="flex items-center gap-2">
+                            <a th:href="@{/review/{id}(id=${avaliacao.id})}"
+                               class="inline-flex items-center gap-1 bg-[#4B2E2B] text-white text-sm font-medium px-3 py-1 rounded hover:bg-[#5c3a36] transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M15 12H9"></path>
+                                    <path d="M12 15l-3-3 3-3"></path>
+                                    <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"></path>
+                                </svg>
+                                Ver detalhes
+                            </a>
+
+                            <!-- Botão de deletar visível apenas para o reviewer -->
+                            <div th:if="${#authentication.principal.id == avaliacao.reviewer.user.id}">
+                                <form th:action="@{/review/delete}" method="post">
+                                    <input type="hidden" name="reviewId" th:value="${avaliacao.id}" />
+                                    <input type="hidden" name="raaaa" th:value="${#authentication.principal}" />
+                                    <input type="hidden" name="cafeteriaId" th:value="${unidadeEscolhida.id}" />
+                                    <button type="submit"
+                                            class="p-2 rounded hover:bg-red-100 transition"
+                                            title="Remover avaliação">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500 hover:text-red-700"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                                            <path d="M10 11v6"></path>
+                                            <path d="M14 11v6"></path>
+                                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 </main>
 </body>

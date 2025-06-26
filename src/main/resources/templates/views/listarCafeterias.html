@@ -23,11 +23,15 @@
             <h2 class="text-2xl font-bold mb-4">Cafeterias Encontradas</h2>
             <ul class="space-y-4">
                 <li th:each="cafeteria : ${cafeterias}" class="p-4 bg-gray-100 rounded-lg shadow-sm hover:bg-gray-200 transition">
-                    <div class="flex items-center">
+                    <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-xl font-semibold" th:text="${cafeteria.fantasyName}"></h3>
                             <p th:text="${cafeteria.socialReason}"></p>
                         </div>
+                        <a th:href="@{/cafeteria/{cnpj}(cnpj=${cafeteria.CNPJ})}"
+                           class="text-amber-600 hover:text-amber-800 font-medium">
+                            Ver detalhes →
+                        </a>
                     </div>
                 </li>
             </ul>

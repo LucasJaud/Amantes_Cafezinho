@@ -76,10 +76,6 @@
 
     <!-- Botões de ação -->
     <div class="flex justify-end gap-4" sec:authorize="hasRole('CAFETERIA')">
-        <a th:href="@{/cafeterias/{id}/edit(id=${cafeteria.id})}"
-           class="bg-[#C98A4B] hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition-colors">
-            Editar Perfil
-        </a>
         <a th:href="@{/unit/form}"
            class="bg-[#6B8E23] hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
             Adicionar Unidade

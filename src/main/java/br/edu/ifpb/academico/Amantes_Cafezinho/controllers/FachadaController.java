@@ -54,7 +54,7 @@ public class FachadaController {
         // e redireciona para o perfil da unidade criada
         // ñ está implementado ainda o profile da unidade
         redirectAttributes.addFlashAttribute("success", "Unidade criada com sucesso!");
-        mav.setViewName("redirect:/unit/" + IDdaUnidadeCriada + "/profile/");
+        mav.setViewName("redirect:/unit/" + IDdaUnidadeCriada + "/profile");
 
         return mav;
         
@@ -139,7 +139,7 @@ public class FachadaController {
         review.setStatus(reviewService.buscarPorTipo("ativo").get());
         fachadaService.criarAvaliacao(review);
         redirectAttributes.addFlashAttribute("success", "Avaliação criada com sucesso!");
-        mav.setViewName("redirect:/unit/" + unitId + "/profile/");
+        mav.setViewName("redirect:/unit/" + unitId + "/profile");
 
         return mav;
     }
@@ -180,7 +180,7 @@ public class FachadaController {
             ) {
 
         fachadaService.excluirReview(reviewId);
-        mav.setViewName("redirect:/unit/" + cafeteriaId + "/profile/");
+        mav.setViewName("redirect:/unit/" + cafeteriaId + "/profile");
         return mav;
     }
 

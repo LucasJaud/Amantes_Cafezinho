@@ -22,19 +22,15 @@
                             Avaliador
                         </a>
                     </li>
-                    <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200">
-                        <a href="#" class="flex items-center">
-                            Support
-                        </a>
-                    </li>
-                    <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200">
-                        <a th:href="@{/auth/logout}" class="flex items-center">
-                            Logout
-                        </a>
-                    </li>
                     <li class="flex items-center p-1 text-sm gap-x-2 text-gray-200" sec:authorize="hasRole('REVIEWER')">
                         <a th:href="@{/cafeteria/listarCafeterias}" class="flex items-center">
                             Lista de Cafeterias
+                        </a>
+                    </li>
+                    <li class="p-1">
+                        <a th:href="@{/auth/logout}"
+                           class="flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-white bg-red-600 rounded hover:bg-red-700 transition">
+                            Logout
                         </a>
                     </li>
                 </ul>

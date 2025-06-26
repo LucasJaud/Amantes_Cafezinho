@@ -87,9 +87,15 @@
         <div class="flex flex-col gap-4">
             <h3 class="text-2xl font-bold">Avaliações</h3>
 
-            <div th:if="${avaliacoes.size() == 0}" class="text-[#A89F91]">
-                Nenhuma avaliação encontrada.
+            <div class="flex items-center text-[#4B2E2B] font-medium text-lg">
+                    <span th:if="${unidadeEscolhida.average != null and unidadeEscolhida.average != 0.0}">
+                        ⭐ <span th:text="${#numbers.formatDecimal(unidadeEscolhida.average, 1, 1)}">4.5</span>
+                    </span>
+                    <span th:unless="${unidadeEscolhida.average != null and unidadeEscolhida.average != 0.0}" class="text-sm text-gray-500">
+                        Nenhuma avaliação encontrada.
+                    </span>
             </div>
+
 
             <!-- Grid para colocar 2 por linha no desktop -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

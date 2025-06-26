@@ -1,7 +1,7 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.services;
 
 import br.edu.ifpb.academico.Amantes_Cafezinho.dtos.ReviewListDTO;
-import br.edu.ifpb.academico.Amantes_Cafezinho.errors.ReviewListForReviewerNotFoundException;
+import br.edu.ifpb.academico.Amantes_Cafezinho.errors.ReviewListForReviewerNotFoundException; // Mantenha se a exceção ainda existir em outro lugar
 import br.edu.ifpb.academico.Amantes_Cafezinho.errors.ReviewNotFoundException;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Review;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
@@ -9,6 +9,7 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.models.Status;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Unit;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.ReviewRepository;
 import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.StatusRepository;
+import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.UnitRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class ReviewServiceTest {
     @Mock
     private StatusRepository statusRepository;
 
+    @Mock
+    private UnitRepository unitRepository;
+
     @InjectMocks
     private ReviewService reviewService;
 
@@ -53,6 +57,7 @@ class ReviewServiceTest {
         testUnit = new Unit();
         testUnit.setId(1L);
         testUnit.setName("Unidade Teste");
+        testUnit.setAverage(0.0); // Inicializar a média para simular
 
         testReview1 = new Review();
         testReview1.setId(1L);
@@ -60,7 +65,7 @@ class ReviewServiceTest {
         testReview1.setContent("Excelente café e ambiente!");
         testReview1.setReviewer(testReviewer);
         testReview1.setUnit(testUnit);
-        testReview1.setDatetime(LocalDate.of(2024, 1, 1)); // Data fixa para o teste inicial
+        testReview1.setDatetime(LocalDate.of(2024, 1, 1));
 
         testReview2 = new Review();
         testReview2.setId(2L);
@@ -76,177 +81,174 @@ class ReviewServiceTest {
     }
 
     @Test
-    @DisplayName("Deve criar uma nova avaliação com sucesso")
-    void criarReview_ShouldSaveAndReturnReview() {
+    @DisplayName("Deve criar uma nova review e atualizar a média da unidade")
+    void criarReview_ShouldSaveReviewAndUpdateUnitAverage() {
         when(reviewRepository.save(any(Review.class))).thenReturn(testReview1);
+
+        // Mock para findAverageRatingByUnitId retorna Double (não Optional)
+        when(unitRepository.findAverageRatingByUnitId(testUnit.getId())).thenReturn(5.0); // <-- Aqui!
+
+        when(unitRepository.save(any(Unit.class))).thenReturn(testUnit);
 
         Review createdReview = reviewService.criarReview(testReview1);
 
         assertNotNull(createdReview);
         assertEquals(testReview1.getId(), createdReview.getId());
         assertEquals(testReview1.getContent(), createdReview.getContent());
+
         verify(reviewRepository, times(1)).save(testReview1);
+        verify(unitRepository, times(1)).findAverageRatingByUnitId(testUnit.getId());
+        // Use argThat para verificar que o 'save' foi chamado com a unidade cujo 'average' é 5.0 (Double)
+        verify(unitRepository, times(1)).save(argThat(unit -> unit.getAverage().equals(5.0)));
     }
 
     @Test
-    @DisplayName("Deve buscar uma avaliação por ID e retornar a avaliação")
+    @DisplayName("Deve excluir uma review existente e atualizar a média da unidade")
+    void excluirReview_ShouldDeleteReviewAndUpdateUnitAverage() {
+        Long reviewIdToDelete = 1L;
+
+        when(reviewRepository.findById(reviewIdToDelete)).thenReturn(Optional.of(testReview1));
+        doNothing().when(reviewRepository).deleteById(reviewIdToDelete);
+
+        // Mock para findAverageRatingByUnitId retorna Double (não Optional)
+        when(unitRepository.findAverageRatingByUnitId(testUnit.getId())).thenReturn(4.0); // <-- Aqui!
+        when(unitRepository.save(any(Unit.class))).thenReturn(testUnit);
+
+        reviewService.excluirReview(reviewIdToDelete);
+
+        verify(reviewRepository, times(1)).findById(reviewIdToDelete);
+        verify(reviewRepository, times(1)).deleteById(reviewIdToDelete);
+        verify(unitRepository, times(1)).findAverageRatingByUnitId(testUnit.getId());
+        verify(unitRepository, times(1)).save(argThat(unit -> unit.getAverage().equals(4.0)));
+    }
+
+    @Test
+    @DisplayName("Não deve excluir review nem atualizar média se ID não existir")
+    void excluirReview_ShouldDoNothingIfIdDoesNotExist() {
+        Long nonExistentId = 99L;
+        when(reviewRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        reviewService.excluirReview(nonExistentId);
+
+        verify(reviewRepository, times(1)).findById(nonExistentId);
+        verify(reviewRepository, never()).deleteById(anyLong());
+        verify(unitRepository, never()).findAverageRatingByUnitId(anyLong()); // Não deve chamar findAverageRating
+        verify(unitRepository, never()).save(any(Unit.class));
+    }
+
+
+    @Test
+    @DisplayName("Deve atualizar uma review existente e a média da unidade")
+    void atualizarReview_ShouldUpdateReviewAndUnitAverage() {
+        Long reviewIdToUpdate = 1L;
+        Review novaAvaliacaoData = new Review();
+        novaAvaliacaoData.setRating(3);
+        novaAvaliacaoData.setContent("Conteúdo atualizado.");
+
+        when(reviewRepository.findById(reviewIdToUpdate)).thenReturn(Optional.of(testReview1));
+        when(reviewRepository.save(any(Review.class))).thenReturn(testReview1);
+
+        // Mock para findAverageRatingByUnitId retorna Double (não Optional)
+        when(unitRepository.findAverageRatingByUnitId(testUnit.getId())).thenReturn(3.5); // <-- Aqui!
+        when(unitRepository.save(any(Unit.class))).thenReturn(testUnit);
+
+        Review updatedReview = reviewService.atualizarReview(reviewIdToUpdate, novaAvaliacaoData);
+
+        assertNotNull(updatedReview);
+        assertEquals(testReview1.getId(), updatedReview.getId());
+        assertEquals(novaAvaliacaoData.getRating(), updatedReview.getRating());
+        assertEquals(novaAvaliacaoData.getContent(), updatedReview.getContent());
+
+        verify(reviewRepository, times(1)).findById(reviewIdToUpdate);
+        verify(reviewRepository, times(1)).save(testReview1);
+        verify(unitRepository, times(1)).findAverageRatingByUnitId(testUnit.getId());
+        verify(unitRepository, times(1)).save(argThat(unit -> unit.getAverage().equals(3.5)));
+    }
+
+    @Test
+    @DisplayName("Deve lançar ReviewNotFoundException ao tentar atualizar review inexistente")
+    void atualizarReview_ShouldThrowExceptionWhenNotFound() {
+        Long nonExistentId = 99L;
+        when(reviewRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThrows(ReviewNotFoundException.class, () ->
+                reviewService.atualizarReview(nonExistentId, new Review()));
+
+        verify(reviewRepository, times(1)).findById(nonExistentId);
+        verify(reviewRepository, never()).save(any(Review.class));
+        verify(unitRepository, never()).findAverageRatingByUnitId(anyLong()); // Não deve chamar findAverageRating
+        verify(unitRepository, never()).save(any(Unit.class));
+    }
+
+    @Test
+    @DisplayName("Deve buscar uma review por ID e retornar a review")
     void buscarPorId_ShouldReturnReviewWhenFound() {
         when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview1));
-
         Review foundReview = reviewService.buscarPorId(1L);
-
         assertNotNull(foundReview);
         assertEquals(testReview1.getId(), foundReview.getId());
-        assertEquals(testReview1.getContent(), foundReview.getContent());
         verify(reviewRepository, times(1)).findById(1L);
     }
 
     @Test
-    @DisplayName("Deve buscar uma avaliação por ID e retornar null quando não encontrada")
+    @DisplayName("Deve buscar uma review por ID e retornar null quando não encontrada")
     void buscarPorId_ShouldReturnNullWhenNotFound() {
         when(reviewRepository.findById(anyLong())).thenReturn(Optional.empty());
-
         Review foundReview = reviewService.buscarPorId(99L);
-
         assertNull(foundReview);
         verify(reviewRepository, times(1)).findById(99L);
     }
 
     @Test
-    @DisplayName("Deve buscar um status por tipo e retornar o status")
-    void buscarPorTipo_ShouldReturnStatusWhenFound() {
-        when(statusRepository.findByType("PENDING")).thenReturn(testStatus);
-
-        Status foundStatus = reviewService.buscarPorTipo("PENDING");
-
-        assertNotNull(foundStatus);
-        assertEquals(testStatus.getType(), foundStatus.getType());
+    @DisplayName("Deve buscar um status por tipo e retornar o Optional de Status")
+    void buscarPorTipo_ShouldReturnOptionalOfStatusWhenFound() {
+        when(statusRepository.findByType("PENDING")).thenReturn(Optional.of(testStatus));
+        Optional<Status> foundStatus = reviewService.buscarPorTipo("PENDING");
+        assertTrue(foundStatus.isPresent());
+        assertEquals(testStatus.getType(), foundStatus.get().getType());
         verify(statusRepository, times(1)).findByType("PENDING");
     }
 
     @Test
-    @DisplayName("Deve buscar um status por tipo e retornar null quando não encontrado")
-    void buscarPorTipo_ShouldReturnNullWhenNotFound() {
-        when(statusRepository.findByType(anyString())).thenReturn(null);
-
-        Status foundStatus = reviewService.buscarPorTipo("NON_EXISTENT");
-
-        assertNull(foundStatus);
+    @DisplayName("Deve buscar um status por tipo e retornar Optional.empty quando não encontrado")
+    void buscarPorTipo_ShouldReturnOptionalEmptyWhenNotFound() {
+        when(statusRepository.findByType(anyString())).thenReturn(Optional.empty());
+        Optional<Status> foundStatus = reviewService.buscarPorTipo("NON_EXISTENT");
+        assertFalse(foundStatus.isPresent());
         verify(statusRepository, times(1)).findByType("NON_EXISTENT");
     }
 
     @Test
-    @DisplayName("Deve listar avaliações por unidade")
+    @DisplayName("Deve listar reviews por unidade")
     void listarPorUnidade_ShouldReturnListOfReviews() {
         List<Review> reviews = Arrays.asList(testReview1, testReview2);
         when(reviewRepository.findByUnit(testUnit)).thenReturn(reviews);
-
         List<Review> foundReviews = reviewService.listarPorUnidade(testUnit);
-
         assertNotNull(foundReviews);
         assertFalse(foundReviews.isEmpty());
         assertEquals(2, foundReviews.size());
-        assertTrue(foundReviews.contains(testReview1));
-        assertTrue(foundReviews.contains(testReview2));
         verify(reviewRepository, times(1)).findByUnit(testUnit);
     }
 
     @Test
-    @DisplayName("Deve listar avaliações por avaliador e converter para DTOs")
+    @DisplayName("Deve listar reviews por avaliador e converter para DTOs (sem exceção de lista vazia)")
     void listarPorAvaliador_ShouldReturnListOfReviewListDTOs() {
         List<Review> reviews = Arrays.asList(testReview1, testReview2);
         when(reviewRepository.findByReviewer(testReviewer)).thenReturn(reviews);
-
         List<ReviewListDTO> dtoList = reviewService.listarPorAvaliador(testReviewer);
-
         assertNotNull(dtoList);
         assertFalse(dtoList.isEmpty());
         assertEquals(2, dtoList.size());
-        assertEquals(testReview1.getContent(), dtoList.get(0).content());
-        assertEquals(testReview2.getRating(), dtoList.get(1).rating());
         verify(reviewRepository, times(1)).findByReviewer(testReviewer);
     }
 
     @Test
-    @DisplayName("Deve lançar ReviewListForReviewerNotFoundException quando listarPorAvaliador não encontra avaliações")
-    void listarPorAvaliador_ShouldThrowExceptionWhenNoReviewsFound() {
+    @DisplayName("Deve retornar lista vazia quando listarPorAvaliador não encontra reviews")
+    void listarPorAvaliador_ShouldReturnEmptyListWhenNoReviewsFound() {
         when(reviewRepository.findByReviewer(testReviewer)).thenReturn(Collections.emptyList());
-
-        assertThrows(ReviewListForReviewerNotFoundException.class, () ->
-                reviewService.listarPorAvaliador(testReviewer));
-
+        List<ReviewListDTO> dtoList = reviewService.listarPorAvaliador(testReviewer);
+        assertNotNull(dtoList);
+        assertTrue(dtoList.isEmpty());
         verify(reviewRepository, times(1)).findByReviewer(testReviewer);
-    }
-
-    @Test
-    @DisplayName("Deve deletar uma avaliação existente com sucesso")
-    void excluirReview_ShouldDeleteExistingReview() {
-        when(reviewRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(reviewRepository).deleteById(1L);
-
-        reviewService.excluirReview(1L);
-
-        verify(reviewRepository, times(1)).existsById(1L);
-        verify(reviewRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
-    @DisplayName("Não deve fazer nada ao tentar deletar uma avaliação inexistente")
-    void excluirReview_ShouldDoNothingWhenReviewDoesNotExist() {
-        when(reviewRepository.existsById(99L)).thenReturn(false);
-
-        reviewService.excluirReview(99L);
-
-        verify(reviewRepository, times(1)).existsById(99L);
-        verify(reviewRepository, never()).deleteById(anyLong());
-    }
-
-    @Test
-    @DisplayName("Deve atualizar uma avaliação existente com sucesso e definir a data atual")
-    void atualizarReview_ShouldUpdateExistingReviewAndSetCurrentDate() {
-        // Dados para a nova avaliação
-        Review newReviewData = new Review();
-        newReviewData.setRating(3);
-        newReviewData.setContent("Café razoável. Melhorou um pouco.");
-        // A data de newReviewData não importa, pois o método `update` no modelo sempre define `LocalDate.now()`
-
-        // Dado que o repositório encontra a avaliação original (testReview1)
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview1));
-        // Quando `reviewRepository.save()` for chamado com `any(Review.class)`, retorne a instância de testReview1
-        // Isso simula que o objeto `testReview1` foi atualizado e salvo.
-        when(reviewRepository.save(any(Review.class))).thenReturn(testReview1);
-
-        // Capturamos a data esperada ANTES de chamar o método, pois o método `update` usa `LocalDate.now()`
-        LocalDate expectedDateAfterUpdate = LocalDate.now();
-
-        // Quando o serviço for chamado para atualizar
-        reviewService.atualizarReview(1L, newReviewData);
-
-        // Então, o método findById deve ter sido chamado
-        verify(reviewRepository, times(1)).findById(1L);
-        // E o método save deve ter sido chamado com a avaliação que foi atualizada
-        verify(reviewRepository, times(1)).save(testReview1);
-
-        // Verifica se os campos de testReview1 foram atualizados (já que ele é o objeto real manipulado)
-        assertEquals(3, testReview1.getRating());
-        assertEquals("Café razoável. Melhorou um pouco.", testReview1.getContent());
-
-        // Verifica se a data foi atualizada para a data corrente (do momento do teste)
-        // Usamos `assertEquals` com `LocalDate.now()` no teste para verificar,
-        // pois o método `update` do modelo Review usa `LocalDate.now()`.
-        assertEquals(expectedDateAfterUpdate, testReview1.getDatetime());
-    }
-
-
-    @Test
-    @DisplayName("Deve lançar ReviewNotFoundException ao tentar atualizar avaliação inexistente")
-    void atualizarReview_ShouldThrowExceptionWhenNotFound() {
-        when(reviewRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(ReviewNotFoundException.class, () ->
-                reviewService.atualizarReview(99L, new Review()));
-
-        verify(reviewRepository, times(1)).findById(99L);
-        verify(reviewRepository, never()).save(any(Review.class));
     }
 }

@@ -2,6 +2,8 @@ package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 import jakarta.persistence.*;
 //import jakarta.persistence.CascadeType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +39,9 @@ public class Unit {
 
     @NotBlank(message = "A categoria de preços é obrigatória")
     private String priceCategory;
+
+    @Column(nullable = false)
+    private Double average = 0.0;
 
     @OneToMany(mappedBy = "unit",fetch = FetchType.EAGER)
     private List<Review> reviews;

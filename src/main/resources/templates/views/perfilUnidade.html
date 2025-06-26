@@ -136,22 +136,10 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg my-1 mr-2" viewBox="0 0 16 16">
                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                             </svg>
-                            Problema nâo resolvido
+                            Problema não resolvido
                         </div>
                     </div>
-
-                    <!-- Ícone de comentário com contador -->
-                    <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                             stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M2.25 12.75c0 .621.504 1.125 1.125 1.125h.75v3.375L7.5 13.875h9.375c.621 0 1.125-.504
-                          1.125-1.125v-7.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125
-                          1.125v7.5z"/>
-                        </svg>
-                        <span th:text="${avaliacao.comments.size()}"></span>
-                    </div>
-                    <div sec:authorize="hasRole('REVIEWER')" th:if="${#authentication.principal.id == avaliacao.reviewer.id}">
+                    <div th:if="${#authentication.principal.id == avaliacao.reviewer.id}">
                             <form  th:action="@{/review/delete}" method="post">
                                 <input type="hidden" name="reviewId" th:value="${avaliacao.id}"/>
                                 <input type="hidden" name="cafeteriaId" th:value="${unidadeEscolhida.id}"/>
@@ -159,11 +147,22 @@
                             </form>
                     </div>
 
-                    <!-- Botão “Ver detalhes” -->
-                    <div class="mt-2">
+                    <div class="flex justify-between items-center mt-2">
+                        <!-- Ícone de comentários à esquerda -->
+                        <div class="flex items-center gap-1 text-sm text-[#4B2E2B]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M2.25 12.75c0 .621.504 1.125 1.125 1.125h.75v3.375L7.5 13.875h9.375c.621 0 1.125-.504
+              1.125-1.125v-7.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125
+              1.125v7.5z"/>
+                            </svg>
+                            <span th:text="${avaliacao.comments.size()}"></span>
+                        </div>
+
+                        <!-- Botão “Ver detalhes” à direita -->
                         <a th:href="@{/review/{id}(id=${avaliacao.id})}"
                            class="inline-flex items-center gap-1 bg-[#4B2E2B] text-white text-sm font-medium px-3 py-1 rounded hover:bg-[#5c3a36]">
-                            <!-- Ícone opcional -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M15 12H9"></path>
@@ -173,12 +172,9 @@
                             Ver detalhes
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </div>
 </main>
 </body>

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 @Controller
 @RequestMapping("/auth")
@@ -25,6 +28,55 @@ public class AuthController {
     public ModelAndView logIn(ModelAndView mav) {
         mav.setViewName("auth/login");
         return mav;
+    }
+
+    @PostMapping("/process-login")
+    public ModelAndView logInPost(String email, String password, ModelAndView mav, HttpSession session) {
+        try {
+            System.out.println("teste22");
+
+            try {
+                Reviewer reviewer = authservice.loginReviewer(email, password);
+
+                // Autenticar no Spring Security
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(reviewer, null, reviewer.getUser().getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                // Salvar contexto de segurança na sessão
+                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                        SecurityContextHolder.getContext());
+
+                session.setAttribute("role", "reviewer");
+                mav.setViewName("redirect:/home");
+                return mav;
+
+            } catch (RuntimeException e) {
+                if (!"Usuário não encontrado".equals(e.getMessage())) {
+                    throw e; // se for outro erro, não tenta cafeteria
+                }
+
+                Cafeteria cafeteria = authservice.loginCafeteria(email, password);
+
+                // Autenticar no Spring Security
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(cafeteria, null, cafeteria.getUser().getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                // Salvar contexto de segurança na sessão
+                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                        SecurityContextHolder.getContext());
+
+                session.setAttribute("role", "cafeteria");
+                mav.setViewName("redirect:/home");
+                return mav;
+            }
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            mav.addObject("error", e.getMessage());
+            mav.setViewName("auth/login");
+            return mav;
+        }
     }
 
     @GetMapping("/signup")

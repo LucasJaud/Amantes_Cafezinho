@@ -1,6 +1,7 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -30,6 +31,12 @@ public class Reviewer{
 
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.EAGER)
     private List<Review> review;
+
+    @Column(nullable = false)
+    private int failedLoginAttempts = 0;
+
+    @Column
+    private LocalDateTime accountLockedUntil;
 
     @Override
     public String toString() {

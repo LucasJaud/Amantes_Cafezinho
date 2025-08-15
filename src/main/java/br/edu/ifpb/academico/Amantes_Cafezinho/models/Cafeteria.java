@@ -1,5 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -32,4 +33,10 @@ public class Cafeteria{
 
     @OneToMany(mappedBy = "cafeteria",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Unit> units;
+
+    @Column(nullable = false)
+    private int failedLoginAttempts = 0;
+
+    @Column
+    private LocalDateTime accountLockedUntil;
 }

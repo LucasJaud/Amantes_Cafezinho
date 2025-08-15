@@ -50,9 +50,13 @@ public class ReviewService {
         Optional<Review> reviewOptional = reviewRepository.findById(id);
 
         if (reviewOptional.isPresent()) {
-            Review reviewDeletada = reviewOptional.get();
+            Review review = reviewOptional.get();
+            Long unitId = review.getUnit().getId();
             reviewRepository.deleteById(id);
-            //updateUnitAverageRating(reviewDeletada.getUnit());
+            Optional<Unit> unit = unitRepository.findById(unitId);
+//            if (unit.isPresent()) {
+//                updateUnitAverageRating(unit.get());
+//            }
         }
     }
 

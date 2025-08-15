@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class AuthService {
 
@@ -77,6 +80,71 @@ public class AuthService {
                 });
 
         return role;
+    }
+
+    public Reviewer loginReviewer(String email, String password) {
+        email = email.trim().toLowerCase();
+        Reviewer reviewer = reviewerRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        System.out.println(reviewer.getFullName());
+        // Verifica bloqueio
+        if (reviewer.getAccountLockedUntil() != null &&
+                reviewer.getAccountLockedUntil().isAfter(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Conta bloqueada até " + reviewer.getAccountLockedUntil().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            );
+        }
+
+        // Valida senha
+        if (!passwordEncoder.matches(password, reviewer.getUser().getPassword())) {
+            reviewer.setFailedLoginAttempts(reviewer.getFailedLoginAttempts() + 1);
+
+            if (reviewer.getFailedLoginAttempts() >= 5) {
+                reviewer.setAccountLockedUntil(LocalDateTime.now().plusMinutes(15)); // 15 minutos de bloqueio
+                reviewer.setFailedLoginAttempts(0); // reseta após bloquear
+            }
+
+            reviewerRepository.save(reviewer);
+            System.out.println("CODIGO GERANDO SENHA INCORRETA");
+            throw new RuntimeException("Senha incorreta");
+        }
+
+        // Login bem-sucedido
+        reviewer.setFailedLoginAttempts(0);
+        reviewer.setAccountLockedUntil(null);
+        reviewerRepository.save(reviewer);
+
+        return reviewer;
+    }
+
+    public Cafeteria loginCafeteria(String email, String password) {
+        Cafeteria cafeteria = cafeteriaRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (cafeteria.getAccountLockedUntil() != null &&
+                cafeteria.getAccountLockedUntil().isAfter(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Conta bloqueada até " + cafeteria.getAccountLockedUntil().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            );
+        }
+
+        if (!passwordEncoder.matches(password, cafeteria.getUser().getPassword())) {
+            cafeteria.setFailedLoginAttempts(cafeteria.getFailedLoginAttempts() + 1);
+
+            if (cafeteria.getFailedLoginAttempts() >= 5) {
+                cafeteria.setAccountLockedUntil(LocalDateTime.now().plusMinutes(15));
+                cafeteria.setFailedLoginAttempts(0);
+            }
+
+            cafeteriaRepository.save(cafeteria);
+            throw new RuntimeException("Senha incorreta");
+        }
+
+        cafeteria.setFailedLoginAttempts(0);
+        cafeteria.setAccountLockedUntil(null);
+        cafeteriaRepository.save(cafeteria);
+
+        return cafeteria;
     }
 
 }

@@ -49,7 +49,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login")
+                        .loginProcessingUrl("/spring-security-login")
                         .usernameParameter("email")
                         .successHandler(authenticationSuccessHandler())
                         .failureHandler(authenticationFailureHandler())

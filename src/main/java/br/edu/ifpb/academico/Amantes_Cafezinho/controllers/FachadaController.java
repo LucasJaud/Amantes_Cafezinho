@@ -113,7 +113,7 @@ public class FachadaController {
     ) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Erro ao criar avaliação. Verifique os dados.");
-            mav.setViewName("redirect:/unit/" + unitId + "/profile/review/save");
+            mav.setViewName("redirect:/unit/" + unitId + "/profile/review/form");
             return mav;
         }
 

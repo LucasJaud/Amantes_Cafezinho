@@ -43,14 +43,20 @@ public class UnitService {
     public List<Unit> resgatarUnidadesPorCafeteria(Cafeteria cafeteria) {
         
         return unitRepository.findByCafeteria(cafeteria);
-    }	
+    }
 
+    public List<Unit> listarTodasAtivas() {
+        return unitRepository.findByIsActiveTrue();
+    }
 
+    public List<Unit> listarTodas() {
+        return unitRepository.findAll();
+    }
 
-
-
-
-
-
-    
+    public void alterarStatus(Long id) {
+        Unit unit = unitRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Unidade não encontrada"));
+        unit.setActive(!unit.isActive());
+        unitRepository.save(unit);
+    }
 }

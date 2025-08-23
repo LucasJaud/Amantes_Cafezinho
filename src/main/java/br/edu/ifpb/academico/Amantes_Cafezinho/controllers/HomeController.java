@@ -24,11 +24,11 @@ public class HomeController {
     @GetMapping("/home")
     public ModelAndView home (ModelAndView mav, HttpSession session){
         User user = (User) session.getAttribute("user");
+
         if(user != null){
             Cafeteria cafeteria = cafeteriaRepository.findByUser(user).orElse(null);
-            System.out.println(user);
-            System.out.println(cafeteria);
             mav.addObject("user", user);
+
             if(cafeteria != null){
                 mav.addObject("cafeteria", cafeteria);
             }

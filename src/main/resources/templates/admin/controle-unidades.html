@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt_BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Amantes do Cafezinho | Controle de Unidades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Controle de Unidades</h1>
+
+    <div class="bg-white rounded-lg shadow-md divide-y">
+        <div th:each="unit : ${unidades}" class="flex justify-between items-center p-4">
+            <!-- Infos da unidade -->
+            <div>
+                <p class="font-semibold text-lg" th:text="${unit.name}"></p>
+                <p class="text-sm text-gray-600" th:text="${unit.cnpj}"></p>
+                <p class="mt-1 text-sm font-medium"
+                   th:text="${unit.active ? 'Status: Ativa' : 'Status: Inativa'}"
+                   th:classappend="${unit.active} ? 'text-green-600' : 'text-red-600'"></p>
+            </div>
+
+            <!-- Toggle -->
+            <form th:action="@{'/admin/units/' + ${unit.id} + '/toggle'}" method="post"
+                  onsubmit="showToast([[${unit.active} ? 'Desativada' : 'Ativada']])">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="ativo"
+                           th:checked="${unit.active}" onchange="this.form.submit()" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                </label>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"
+     class="hidden fixed bottom-5 left-5 bg-gray-800 text-white text-sm px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
+</div>
+
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = "Unidade " + message;
+        toast.classList.remove('hidden');
+
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+</script>
+
+<style>
+    @keyframes fade-in-out {
+        0% { opacity: 0; transform: translateY(10px); }
+        10% { opacity: 1; transform: translateY(0); }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(10px); }
+    }
+    .animate-fade-in-out {
+        animation: fade-in-out 3s ease-in-out;
+    }
+</style>
+</body>
+</html>

@@ -6,10 +6,8 @@ import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Role;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.User;
-import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.CafeteriaRepository;
-import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.ReviewerRepository;
-import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.RoleRepository;
-import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.UserRepository;
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Admin;
+import br.edu.ifpb.academico.Amantes_Cafezinho.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +30,9 @@ public class AuthService {
 
     @Autowired
     private ReviewerRepository reviewerRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -145,6 +146,20 @@ public class AuthService {
         cafeteriaRepository.save(cafeteria);
 
         return cafeteria;
+    }
+
+
+
+    public Admin loginAdmin(String email, String password) {
+        email = email.trim().toLowerCase();
+        Admin admin = adminRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(password, admin.getUser().getPassword())) {
+            throw new RuntimeException("Senha incorreta");
+        }
+
+        return admin;
     }
 
 }

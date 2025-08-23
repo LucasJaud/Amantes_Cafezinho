@@ -1,5 +1,6 @@
 package br.edu.ifpb.academico.Amantes_Cafezinho.controllers;
 
+import br.edu.ifpb.academico.Amantes_Cafezinho.models.Admin;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Cafeteria;
 import br.edu.ifpb.academico.Amantes_Cafezinho.models.Reviewer;
 import br.edu.ifpb.academico.Amantes_Cafezinho.services.AuthService;
@@ -33,8 +34,6 @@ public class AuthController {
     @PostMapping("/process-login")
     public ModelAndView logInPost(String email, String password, ModelAndView mav, HttpSession session) {
         try {
-            System.out.println("teste22");
-
             try {
                 Reviewer reviewer = authservice.loginReviewer(email, password);
 
@@ -48,6 +47,8 @@ public class AuthController {
                         SecurityContextHolder.getContext());
 
                 session.setAttribute("role", "reviewer");
+                session.setAttribute("reviewer", reviewer);
+                session.setAttribute("user", reviewer.getUser());
                 mav.setViewName("redirect:/home");
                 return mav;
 
@@ -56,20 +57,46 @@ public class AuthController {
                     throw e; // se for outro erro, não tenta cafeteria
                 }
 
-                Cafeteria cafeteria = authservice.loginCafeteria(email, password);
+                try {
+                    Cafeteria cafeteria = authservice.loginCafeteria(email, password);
 
-                // Autenticar no Spring Security
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(cafeteria, null, cafeteria.getUser().getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // Autenticar no Spring Security
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(cafeteria, null, cafeteria.getUser().getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                // Salvar contexto de segurança na sessão
-                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                        SecurityContextHolder.getContext());
+                    // Salvar contexto de segurança na sessão
+                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                            SecurityContextHolder.getContext());
 
-                session.setAttribute("role", "cafeteria");
-                mav.setViewName("redirect:/home");
-                return mav;
+                    session.setAttribute("role", "cafeteria");
+                    session.setAttribute("cafeteria", cafeteria);
+                    session.setAttribute("user", cafeteria.getUser());
+                    mav.setViewName("redirect:/home");
+                    return mav;
+                } catch (RuntimeException e2) {
+                    if (!"Usuário não encontrado".equals(e2.getMessage())) {
+                        throw e2;
+                    }
+
+                    // 3) Tentativa com Admin
+                    Admin admin = authservice.loginAdmin(email, password);
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    admin.getUser(), null, admin.getUser().getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                            SecurityContextHolder.getContext());
+                    session.setAttribute("role", "admin");
+                    session.setAttribute("admin", admin);
+                    session.setAttribute("user", admin.getUser());
+
+                    mav.setViewName("redirect:/home");
+                    return mav;
+
+                }
             }
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());

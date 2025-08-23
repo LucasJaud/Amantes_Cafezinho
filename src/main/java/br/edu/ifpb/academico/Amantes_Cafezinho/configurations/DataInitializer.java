@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class DataInitializer implements CommandLineRunner {
+public class    DataInitializer implements CommandLineRunner {
 
     @Autowired
     private RoleRepository roleRepository;

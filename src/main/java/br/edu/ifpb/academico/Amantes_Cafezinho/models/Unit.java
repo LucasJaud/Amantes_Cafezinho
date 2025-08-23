@@ -35,7 +35,7 @@ public class Unit {
     message = "CNPJ inválido. Use o formato 00.000.000/0000-00")
     private String cnpj;
 
-    private boolean isActive = true;
+    private boolean isActive = false;
 
     @NotBlank(message = "A categoria de preços é obrigatória")
     private String priceCategory;

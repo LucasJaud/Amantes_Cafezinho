@@ -19,4 +19,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long>{
 
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.unit.id = :unitId")
     Double findAverageRatingByUnitId(@Param("unitId") Long unitId);
+
+    List<Unit> findByIsActiveTrue();
+
+    List<Unit> findByCafeteriaId(Long cafeteriaId);
 }

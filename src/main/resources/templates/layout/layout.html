@@ -12,7 +12,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/@material-tailwind/html@2.3.2/scripts/dialog.js" defer></script>
 
-
+<script>
+    function exibirConfirmacao(){
+    const confirmar = confirm("Tem certeza que deseja fazer logout?");
+    if (confirmar) {
+        window.location.href = "/auth/logout";
+    }
+}   
+</script>
 </head>
 <body>
 <div class="flex flex-col min-h-screen bg-[#F5EBDD] text-[#4B2E2B]">

@@ -33,11 +33,15 @@
                         </a>
                     </li>
                     <li class="p-1">
-                        <a th:href="@{/auth/logout}"
-                           class="flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-white bg-red-600 rounded hover:bg-red-700 transition">
-                            Logout
-                        </a>
-                    </li>
+                        
+                        <button
+                            class="flex items-center justify-center px-3 py-1.5 text-sm font-semibold text-white bg-red-600 rounded hover:bg-red-700 transition"
+                            onclick="exibirConfirmacao()"
+                            >
+                        Logout
+                        </button>
+
+                    </li> 
                 </ul>
             </div>
             <button

@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 "/auth/signup/cafeteria/**",
                                 "/auth/register/**"
                         ).permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // Rotas específicas para ROLE ADMIN
 //                        .requestMatchers(

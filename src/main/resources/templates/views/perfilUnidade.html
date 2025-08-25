@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout :: head}">
+<html lang="pt_BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
     <title>Amantes do Cafezinho | Unidade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
-<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
-<header class="flex justify-between items-center">
-    <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
-</header>
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
 
 <!-- Alerta de sucesso -->
 <div x-data="{ show: true }" x-show="show"

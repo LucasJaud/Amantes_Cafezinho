@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout :: head}">
+<html lang="pt_BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
     <title>Amantes do Cafezinho | Avaliação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#f5f3f0] text-[#4B2E2B] p-6">
-<div class="max-w-3xl mx-auto bg-[#F5EBDD] text-[#4B2E2B] shadow-md rounded-lg p-6">
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
+
+<div class="max-w-3xl mx-auto bg-[#F5EBDD] text-[#4B2E2B] shadow-md rounded-lg p-6 mt-8">
 
     <!-- Título -->
     <h2 class="text-2xl font-bold mb-4">Detalhes da Avaliação</h2>
@@ -51,15 +57,23 @@
     </div>
 
     <div class="flex gap-4 mt-6 mb-6">
-        <!-- Botão para Cafeteria responder -->
-        <div th:if="${#authorization.expression('hasRole(''CAFETERIA'')')
-                  and #authentication.principal.id == review.unit.cafeteria.user.id}">
+        <div th:if="${#authorization.expression('hasRole(''CAFETERIA'')')}">
             <a th:href="@{/comment/answer(reviewId=${review.id})}"
                class="bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-900 text-sm">
                 Responder
             </a>
         </div>
+
+        <div th:if="${#authorization.expression('hasRole(''REVIEWER'')')
+            and session.user != null
+            and session.user.id == review.reviewer.user.id}">
+            <a th:href="@{/review/{id}/edit(id=${review.id})}"
+               class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                Editar Avaliação
+            </a>
+        </div>
     </div>
+
 
     <!-- Comentários -->
     <h3 class="text-xl font-semibold mb-3">Comentários</h3>

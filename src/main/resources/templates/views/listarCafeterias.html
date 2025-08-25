@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt_BR" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layout :: head}">
+<html lang="pt_BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
     <title>Amantes do Cafezinho | Cafeterias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
 
-<body class="px-10 pt-10 flex flex-col h-screen bg-[#F5EBDD] text-[#4B2E2B]">
-<header class="flex justify-between items-center">
-        <h1 class="text-5xl font-bold">Amantes do Cafezinho</h1>
-    </header>
-<main class="flex flex-1 flex-col h-full justify-center items-center mb-8">
+<main class="flex flex-1 flex-col h-full justify-center items-center mb-8 mt-8">
     <div class="flex flex-col gap-2 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
         <form th:action="@{/cafeteria/listarCafeterias}" method="GET">
             <div class="flex">

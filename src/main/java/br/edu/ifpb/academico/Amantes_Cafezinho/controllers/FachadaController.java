@@ -67,6 +67,7 @@ public class FachadaController {
         List<Review> avaliacoes = unidade.getReviews();
         mav.addObject("unidadeEscolhida", unidade);
         mav.addObject("avaliacoes", avaliacoes);
+        mav.addObject("cafeteria", unidade.getCafeteria());
         mav.setViewName("views/perfilUnidade");
         
         return mav;
@@ -167,6 +168,7 @@ public class FachadaController {
 
         mav.addObject("Review", new Review());
         mav.addObject("unidadeEscolhida", unidade);
+        mav.addObject("cafeteria", unidade.getCafeteria());
         mav.setViewName("review/formulario-avaliacao");
 
         return mav;
@@ -188,9 +190,76 @@ public class FachadaController {
     public ModelAndView detalhesAvaliacao(@PathVariable Long id,ModelAndView mav ) {
         Review review = reviewService.buscarPorId(id);
         mav.addObject("review", review);
+        mav.addObject("cafeteria", review.getUnit().getCafeteria());
         mav.setViewName("review/detalhes-avaliacao");
         return mav;
     }
+
+    @GetMapping("/review/{id}/edit")
+    public ModelAndView editarReviewForm(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes, ModelAndView mav) {
+        Review review = reviewService.buscarPorId(id);
+
+        if (review == null) {
+            redirectAttributes.addFlashAttribute("error", "Avaliação não encontrada.");
+            mav.setViewName("redirect:/units");
+            return mav;
+        }
+
+        Reviewer loggedReviewer = fachadaService.buscarReviewerPorUser((User) session.getAttribute("user"));
+        if (loggedReviewer == null || !review.getReviewer().getId().equals(loggedReviewer.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Você não tem permissão para editar esta avaliação.");
+            mav.setViewName("redirect:/unit/" + review.getUnit().getId() + "/profile");
+            return mav;
+        }
+
+        mav.addObject("Review", review);
+        mav.addObject("unidadeEscolhida", review.getUnit());
+        mav.addObject("cafeteria", review.getUnit().getCafeteria());
+        mav.setViewName("review/formulario-editar-avaliacao");
+        return mav;
+    }
+
+    @PostMapping("/review/{id}/edit")
+    public ModelAndView salvarEdicaoReview(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("Review") Review updatedReview,
+            BindingResult result,
+            HttpSession session,
+            RedirectAttributes redirectAttributes,
+            ModelAndView mav
+    ) {
+        Review review = reviewService.buscarPorId(id);
+
+        if (review == null) {
+            redirectAttributes.addFlashAttribute("error", "Avaliação não encontrada.");
+            mav.setViewName("redirect:/units");
+            return mav;
+        }
+
+        Reviewer loggedReviewer = fachadaService.buscarReviewerPorUser((User) session.getAttribute("user"));
+        if (loggedReviewer == null || !review.getReviewer().getId().equals(loggedReviewer.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Você não tem permissão para editar esta avaliação.");
+            mav.setViewName("redirect:/unit/" + review.getUnit().getId() + "/profile");
+            return mav;
+        }
+
+        if (result.hasErrors()) {
+            mav.setViewName("review/formulario-editar-avaliacao");
+            mav.addObject("unidadeEscolhida", review.getUnit());
+            mav.addObject("cafeteria", review.getUnit().getCafeteria());
+            return mav;
+        }
+        review.setContent(updatedReview.getContent());
+        review.setProblemSolved(updatedReview.getProblemSolved());
+        review.setRating(updatedReview.getRating());
+        review.setDatetime(LocalDate.now());
+
+        fachadaService.criarAvaliacao(review);
+        redirectAttributes.addFlashAttribute("success", "Avaliação editada com sucesso!");
+        mav.setViewName("redirect:/unit/" + review.getUnit().getId() + "/profile");
+        return mav;
+    }
+
 
     // Resposta da Cafeteria
     @GetMapping("/comment/answer")

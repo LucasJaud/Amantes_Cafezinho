@@ -11,15 +11,29 @@
 <body class="bg-[#F5EBDD] text-[#4B2E2B]" layout:fragment="content">
 
 <main class="flex flex-1 flex-col h-full justify-center items-center mb-8 mt-8">
-    <div class="flex flex-col gap-2 max-w-[540px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
-        <form th:action="@{/cafeteria/listarCafeterias}" method="GET">
-            <div class="flex">
-                <input type="text" name="nome" placeholder="Nome da Cafeteria" class="w-full px-4 py-2 mr-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E2B]">
-                <button type="submit" class=" bg-[#4B2E2B] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#F5EBDD] transition whitespace-nowrap">
+    <div class="flex flex-col gap-2 max-w-[800px] w-full bg-white shadow-md rounded-xl p-10 border border-zinc-200">
+        <form th:action="@{/cafeteria/listarCafeterias}" method="GET" class="flex flex-col gap-2">
+            <div class="flex gap-2">
+                <input type="text" name="nome" placeholder="Nome da Cafeteria"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E2B]">
+
+                <select name="minRating"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E2B]">
+                    <option value="">Todas as avaliações</option>
+                    <option value="1">1 estrela ou mais</option>
+                    <option value="2">2 estrelas ou mais</option>
+                    <option value="3">3 estrelas ou mais</option>
+                    <option value="4">4 estrelas ou mais</option>
+                    <option value="5">5 estrelas</option>
+                </select>
+
+                <button type="submit"
+                        class="bg-[#4B2E2B] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#F5EBDD] transition whitespace-nowrap">
                     Buscar Cafeterias
                 </button>
             </div>
         </form>
+
         <div th:if="${cafeterias != null and !cafeterias.isEmpty()}" class="mt-6">
             <h2 class="text-2xl font-bold mb-4">Cafeterias Encontradas</h2>
             <ul class="space-y-4">
@@ -42,15 +56,4 @@
         </div>
     </div>
 </main>
-
-
-
-
-
-
-
-
-
-
-
 </body>

@@ -71,16 +71,36 @@ public class CafeteriaController {
     }
 
     @GetMapping("/listarCafeterias")
-    public ModelAndView listarCafeterias(ModelAndView mav, @RequestParam(required = false) String nome) {
+    public ModelAndView listarCafeterias(ModelAndView mav,
+                                         @RequestParam(required = false) String nome,
+                                         @RequestParam(required = false) Double minRating) {
 
-        if(nome == null || nome.isEmpty()) {
-            mav.addObject("cafeterias", service.listarCafeterias());
+        List<Cafeteria> cafeterias;
+
+        if (nome != null && !nome.isEmpty()) {
+            cafeterias = service.listarCafeteriasPorNome(nome);
         } else {
-            mav.addObject("cafeterias", service.listarCafeteriasPorNome(nome));
+            cafeterias = service.listarCafeterias();
         }
 
+        if (minRating != null) {
+            cafeterias = cafeterias.stream()
+                    .filter(c -> {
+                        List<Unit> units = c.getUnits();
+                        if (units.isEmpty()) return false;
+
+                        double averageOfUnits = units.stream()
+                                .mapToDouble(Unit::getAverage)
+                                .average()
+                                .orElse(0.0);
+
+                        return averageOfUnits >= minRating;
+                    })
+                    .toList();
+        }
+
+        mav.addObject("cafeterias", cafeterias);
         mav.setViewName("views/listarCafeterias");
         return mav;
-
     }
 }
